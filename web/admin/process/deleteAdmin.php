@@ -1,7 +1,7 @@
 <?php
 
 include("../include/utils.php");
-checkSessionElseLogin("");
+checkSessionElseLogin("../");
 
 include("../log.php");
 

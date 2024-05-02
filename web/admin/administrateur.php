@@ -48,7 +48,7 @@ $administrateurs = $db->query("SELECT * FROM administrateur")->fetchAll(PDO::FET
             </thead>
             <tbody>
                 <?php foreach ($administrateurs as $admin): ?>
-                    <tr <?php if ($admin['id_administrateur'] === $_SESSION["admin_id"]) echo 'class="table-secondary"'; ?>>
+                    <tr>
                         <td><?php echo $admin['id_administrateur']; ?></td>
                         <td><?php echo $admin['fonction']; ?></td>
                         <td><?php echo $admin['username']; ?></td>
@@ -59,7 +59,7 @@ $administrateurs = $db->query("SELECT * FROM administrateur")->fetchAll(PDO::FET
                                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#detailsAdminModal_<?php echo $admin['id_administrateur']; ?>">
                                     <img src="assets/detail.png" alt="Détail">
                                 </button>
-                                <button type="button" class="btn btn-warning">
+                                <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editAdminModal_<?php echo $admin['id_administrateur']; ?>">
                                     <img src="assets/edit.png" alt="Modifier">
                                 </button>
                                 <button type="button" class="btn btn-danger deleteUserBtn"
@@ -81,31 +81,6 @@ $administrateurs = $db->query("SELECT * FROM administrateur")->fetchAll(PDO::FET
                             <?php endif; ?>
                         </td>
                     </tr>
-                    <!-- Le modal de détails de l'administrateur -->
-                    <div class="modal fade" id="detailsAdminModal_<?php echo $admin['id_administrateur']; ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered modal-lg">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel">Détails de l'administrateur</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <!-- Contenu des détails de l'administrateur -->
-                                    <p><strong>ID: </strong><?php echo $admin['id_administrateur']; ?></p>
-                                    <p><strong>Username: </strong><?php echo $admin['username']; ?></p>
-                                    <p><strong>Email: </strong><?php echo $admin['email']; ?></p>
-                                    <p><strong>Fonction: </strong><?php echo $admin['fonction']; ?></p>
-                                    <p><strong>Date de création: </strong><?php echo $admin['creationDate']; ?></p>
-                                    <p><strong>Créateur: </strong><?php echo $admin['adminCreate']; ?></p>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
-                                    <button type="button" class="btn btn-warning">Editer</button>
-                                    <button type="button" class="btn btn-danger">Supprimer</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 <?php endforeach; ?>
             </tbody>
         </table>
@@ -175,6 +150,82 @@ $administrateurs = $db->query("SELECT * FROM administrateur")->fetchAll(PDO::FET
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
                         <button type="button" class="btn btn-danger" onclick="document.getElementById('deleteUserForm_<?php echo $admin['id_administrateur']; ?>').submit();">Supprimer</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <?php endforeach; ?>
+
+    <!-- Le modal d'édition de l'administrateur -->
+    <?php foreach ($administrateurs as $admin): ?>
+        <div class="modal fade" id="editAdminModal_<?php echo $admin['id_administrateur']; ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Modifier l'administrateur</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <!-- Contenu du modal -->
+                        <form id="editAdminForm_<?php echo $admin['id_administrateur']; ?>" action="process/editAdmin.php" method="post">
+                            <input type="hidden" name="userId" value="<?php echo $admin['id_administrateur']; ?>"> <!-- Champ userId caché -->
+                            <div class="mb-3">
+                                <label for="editUsername" class="form-label">Nom d'utilisateur :</label>
+                                <input type="text" class="form-control" id="editUsername" name="editUsername" value="<?php echo $admin['username']; ?>">
+                            </div>
+                            <div class="mb-3">
+                                <label for="editEmail" class="form-label">Adresse email :</label>
+                                <input type="email" class="form-control" id="editEmail" name="editEmail" value="<?php echo $admin['email']; ?>">
+                            </div>
+                            <div class="mb-3">
+                                <label for="editFonction" class="form-label">Fonction :</label>
+                                <select class="form-select" id="editFonction" name="editFonction">
+                                    <option value="Administrateur" <?php if ($admin['fonction'] === 'Administrateur') echo 'selected'; ?>>Administrateur</option>
+                                    <option value="Support" <?php if ($admin['fonction'] === 'Support') echo 'selected'; ?>>Support</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="editPassword" class="form-label">Nouveau mot de passe :</label>
+                                <input type="password" class="form-control" id="editPassword" name="editPassword">
+                            </div>
+                            <div class="mb-3">
+                                <label for="editConfirmPassword" class="form-label">Confirmer le nouveau mot de passe :</label>
+                                <input type="password" class="form-control" id="editConfirmPassword" name="editConfirmPassword">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Enregistrer</button> <!-- Bouton d'enregistrement -->
+                        </form>
+
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                        <button type="submit" onclick="document.getElementById('editAdminForm_<?php echo $admin['id_administrateur']; ?>').submit();" class="btn btn-primary">Enregistrer</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <?php endforeach; ?>
+
+    <!-- Le modal de détails de l'administrateur -->
+    <?php foreach ($administrateurs as $admin): ?>
+        <div class="modal fade" id="detailsAdminModal_<?php echo $admin['id_administrateur']; ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Détails de l'administrateur</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <!-- Contenu des détails de l'administrateur -->
+                        <p><strong>ID: </strong><?php echo $admin['id_administrateur']; ?></p>
+                        <p><strong>Username: </strong><?php echo $admin['username']; ?></p>
+                        <p><strong>Email: </strong><?php echo $admin['email']; ?></p>
+                        <p><strong>Fonction: </strong><?php echo $admin['fonction']; ?></p>
+                        <p><strong>Date de création: </strong><?php echo $admin['creationDate']; ?></p>
+                        <p><strong>Créateur: </strong><?php echo $admin['adminCreate']; ?></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
                     </div>
                 </div>
             </div>
