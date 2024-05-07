@@ -8,9 +8,21 @@ generateHeader("");
 include("log.php");
 logActivity("", "page administrateur.php");
 
+// Récupérer l'ID de l'utilisateur en cours
+$currentUserId = $_SESSION["admin_id"];
+
 // Récupérer tous les administrateurs
 $db = getDatabase();
 $administrateurs = $db->query("SELECT * FROM administrateur")->fetchAll(PDO::FETCH_ASSOC);
+
+// Vérifier si l'utilisateur en cours est dans la liste des administrateurs
+$isAdmin = false;
+foreach ($administrateurs as $admin) {
+    if ($admin['id_administrateur'] === $currentUserId) {
+        $isAdmin = true;
+        break;
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -192,7 +204,6 @@ $administrateurs = $db->query("SELECT * FROM administrateur")->fetchAll(PDO::FET
                                 <label for="editConfirmPassword" class="form-label">Confirmer le nouveau mot de passe :</label>
                                 <input type="password" class="form-control" id="editConfirmPassword" name="editConfirmPassword">
                             </div>
-                            <button type="submit" class="btn btn-primary">Enregistrer</button> <!-- Bouton d'enregistrement -->
                         </form>
 
 

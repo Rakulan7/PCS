@@ -7,6 +7,25 @@ generateHeader("");
 
 include("log.php");
 logActivity("", "page index.php");
+
+$db = getDatabase();
+
+$getBailleurAccept = $db->prepare("SELECT COUNT(id_bailleur) FROM bailleur WHERE accepte = 1");
+$getBailleurAccept->execute([]);
+$bailleurAccept = $getBailleurAccept->fetchAll(PDO::FETCH_ASSOC);
+$bailleurAccept = $bailleurAccept[0]['COUNT(id_bailleur)'];
+
+$getBailleurWaiting = $db->prepare("SELECT COUNT(id_bailleur) FROM bailleur WHERE (accepte is NULL AND refusee is NULL) OR  (accepte = 0 AND refusee = 0)");
+$getBailleurWaiting->execute([]);
+$bailleurWaiting = $getBailleurWaiting->fetchAll(PDO::FETCH_ASSOC);
+$bailleurWaiting = $bailleurWaiting[0]['COUNT(id_bailleur)'];
+
+$getBailleurRefuse = $db->prepare("SELECT COUNT(id_bailleur) FROM bailleur WHERE refusee = 1");
+$getBailleurRefuse->execute([]);
+$bailleurRefuse = $getBailleurRefuse->fetchAll(PDO::FETCH_ASSOC);
+$bailleurRefuse = $bailleurRefuse[0]['COUNT(id_bailleur)'];
+
+
 ?>
 
 <!DOCTYPE html>
@@ -34,7 +53,7 @@ logActivity("", "page index.php");
   <div class="d-none d-md-block">
     <div class="row row-cols-md-2">
       <div class="col">
-        <a href="bailleurs_valides.php">
+        <a href="bailleurs.php">
           <canvas id="bailleursChart" width="400" height="300"></canvas>
         </a>
       </div>
@@ -68,7 +87,7 @@ logActivity("", "page index.php");
     labels: ['Validés', 'En attente', 'Refusés'],
     datasets: [{
       label: 'Bailleurs',
-      data: [15, 3, 2],
+      data: [<?=$bailleurAccept?>, <?=$bailleurWaiting?>, <?=$bailleurRefuse?>],
       backgroundColor: [
         'rgba(54, 162, 235, 0.2)',
         'rgba(255, 99, 132, 0.2)',
@@ -87,7 +106,7 @@ logActivity("", "page index.php");
     labels: ['Validés', 'En attente', 'Refusés'],
     datasets: [{
       label: 'Biens',
-      data: [25, 5, 1],
+      data: [70, 5, 1],
       backgroundColor: [
         'rgba(75, 192, 192, 0.2)',
         'rgba(255, 159, 64, 0.2)',

@@ -15,11 +15,19 @@ function generateHeader($path) {
                                 Compte
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdownCompte">
-                                <li><a class="dropdown-item" href="#">Bailleurs</a></li>
-                                <li><a class="dropdown-item" href="#">Biens</a></li>
+                                <li><a class="dropdown-item" href="'. $path .'bailleurs.php">Bailleurs</a></li>
                                 <li><a class="dropdown-item" href="#">Voyageurs</a></li>
                                 <li><a class="dropdown-item" href="#">Prestataires</a></li>
                                 <li><a class="dropdown-item" href="'. $path .'administrateur.php">Administrateur</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownProduit" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Produit
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdownProduit">
+                                <li><a class="dropdown-item" href="'. $path .'biens.php">Biens</a></li>
+                                <li><a class="dropdown-item" href="'. $path .'prestations.php">Prestations</a></li>
                             </ul>
                         </li>
                         <li class="nav-item">
