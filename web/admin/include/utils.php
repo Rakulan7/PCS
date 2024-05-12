@@ -19,7 +19,7 @@ function checkSessionElseLogin($path): void
 
     $temps_cookie = 14400;
 
-    if (isset($_COOKIE['temps']) && ($_COOKIE['temps'] + $temps_cookie < time() + 7200)) {
+    if ((isset($_COOKIE['temps']) && ($_COOKIE['temps'] + $temps_cookie < time() + 7200)) || !isset($_COOKIE['temps'])) {
         header("location: " . $path . "login.php?msg=Votre session a expiré. Veuillez vous reconnecter.&err=true");
         exit;
     }
