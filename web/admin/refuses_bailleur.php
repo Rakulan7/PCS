@@ -6,17 +6,31 @@ include("include/header.php");
 generateHeader("");
 
 include("log.php");
-logActivity("", "page refuse bailleur de " . $_POST["id"]);
 
-$bailleur_id = htmlspecialchars($_POST["id"]);
+// Vérifie si l'ID du bailleur a été envoyé en POST
+if(isset($_POST["id"])) {
+    $bailleur_id = htmlspecialchars($_POST["id"]);
 
-$db = getDatabase();
+    $db = getDatabase();
 
-$getBailleur = $db->prepare("SELECT * FROM bailleur WHERE id_bailleur = ?");
-$getBailleur->execute([$bailleur_id]);
-$bailleur = $getBailleur->fetch(PDO::FETCH_ASSOC);
+    // Récupère les informations du bailleur en attente avec l'ID spécifié
+    $getBailleur = $db->prepare("SELECT * FROM bailleur WHERE id_bailleur = ?");
+    $getBailleur->execute([$bailleur_id]);
+    $bailleur = $getBailleur->fetch(PDO::FETCH_ASSOC);
 
-
+    // Vérifie si le bailleur a été trouvé
+    if($bailleur) {
+        logActivity("", "page refuse bailleur de " . $bailleur_id);
+    } else {
+        // Redirectionne vers une page d'erreur si le bailleur n'est pas trouvé
+        header("Location: error.php");
+        exit; // Arrête l'exécution du script pour éviter toute autre sortie
+    }
+} else {
+    // Redirectionne vers une page d'erreur si l'ID du bailleur n'est pas fourni
+    header("Location: error.php");
+    exit; // Arrête l'exécution du script pour éviter toute autre sortie
+}
 ?>
 
 <!DOCTYPE html>
@@ -31,8 +45,27 @@ $bailleur = $getBailleur->fetch(PDO::FETCH_ASSOC);
 </head>
 <body>
 
-    <?= $_POST["id"] ?>
-
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <h2>Bailleur en attente :</h2>
+                <ul>
+                    <li>Nom : <?= $bailleur['nom'] ?></li>
+                    <li>Prénom : <?= $bailleur['prenom'] ?></li>
+                    <li>Email : <?= $bailleur['email'] ?></li>
+                    <!-- Ajoutez d'autres informations du bailleur ici -->
+                </ul>
+                <form action="process/refuses_bailleur.php" method="POST">
+                    <input type="hidden" name="id" value="<?= $bailleur_id ?>">
+                    <div class="form-group">
+                        <label for="reason">Raison du refus :</label>
+                        <input type="text" class="form-control" id="reason" name="reason" required>
+                    </div>
+                    <button type="submit" class="btn btn-danger">Refuser le bailleur</button>
+                </form>
+            </div>
+        </div>
+    </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0-alpha1/js/bootstrap.bundle.min.js" integrity="sha384-qDD3ymFpkHcg6C3rJxnGvD9fSLcWRwB5PZuL8kNGpuD3IiHz5yo1Eo9XQrtwpIdX" crossorigin="anonymous"></script>

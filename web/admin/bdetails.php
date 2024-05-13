@@ -57,7 +57,7 @@ if (($bailleur["accepte"] == NULL && $bailleur["refusee"] == NULL) || ($bailleur
 } elseif ($bailleur["accepte"] == 0 && $bailleur["refusee"] == 1) {
     $buttons = '
     <div class="mt-3">
-        <form action="accept_bailleur.php" method="POST" class="d-inline">
+        <form action="process/accept_bailleur.php" method="POST" class="d-inline">
             <input type="hidden" name="id" value="'. $bailleur['id_bailleur'] .'">
             <button type="submit" class="btn btn-success mr-2">Accepter</button>
         </form>

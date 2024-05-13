@@ -39,5 +39,7 @@ function displayError($msg, $err) {
             '. $msg .'
         </div>
         ';
+    } else {
+        echo '';
     }
 }
