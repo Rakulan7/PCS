@@ -16,7 +16,7 @@ function generateHeader($path) {
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdownCompte">
                                 <li><a class="dropdown-item" href="'. $path .'bailleurs.php">Bailleurs</a></li>
-                                <li><a class="dropdown-item" href="#">Voyageurs</a></li>
+                                <li><a class="dropdown-item" href="'. $path .'voyageurs.php">Voyageurs</a></li>
                                 <li><a class="dropdown-item" href="#">Prestataires</a></li>
                                 <li><a class="dropdown-item" href="'. $path .'administrateur.php">Administrateur</a></li>
                             </ul>

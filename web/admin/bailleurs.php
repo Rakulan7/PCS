@@ -6,7 +6,7 @@ include("include/header.php");
 generateHeader("");
 
 include("log.php");
-logActivity("", "page bailleurs_status.php");
+logActivity("", "page bailleurs.php");
 
 include("function.php");
 

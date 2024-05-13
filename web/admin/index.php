@@ -10,6 +10,7 @@ logActivity("", "page index.php");
 
 $db = getDatabase();
 
+// Partie Bailleur
 $getBailleurAccept = $db->prepare("SELECT COUNT(id_bailleur) FROM bailleur WHERE accepte = 1");
 $getBailleurAccept->execute([]);
 $bailleurAccept = $getBailleurAccept->fetchAll(PDO::FETCH_ASSOC);
@@ -24,6 +25,17 @@ $getBailleurRefuse = $db->prepare("SELECT COUNT(id_bailleur) FROM bailleur WHERE
 $getBailleurRefuse->execute([]);
 $bailleurRefuse = $getBailleurRefuse->fetchAll(PDO::FETCH_ASSOC);
 $bailleurRefuse = $bailleurRefuse[0]['COUNT(id_bailleur)'];
+
+// Partie Voyageur
+$getVoyageurValide = $db->prepare("SELECT COUNT(id_voyageur) FROM voyageur WHERE bloque = 0");
+$getVoyageurValide->execute([]);
+$voyageurValide = $getVoyageurValide->fetchAll(PDO::FETCH_ASSOC);
+$voyageurValide = $voyageurValide[0]['COUNT(id_voyageur)'];
+
+$getVoyageurBloque = $db->prepare("SELECT COUNT(id_voyageur) FROM voyageur WHERE bloque = 1");
+$getVoyageurBloque->execute([]);
+$bailleurBloque = $getVoyageurBloque->fetchAll(PDO::FETCH_ASSOC);
+$bailleurBloque = $bailleurBloque[0]['COUNT(id_voyageur)'];
 
 
 ?>
@@ -63,7 +75,7 @@ $bailleurRefuse = $bailleurRefuse[0]['COUNT(id_bailleur)'];
         </a>
       </div>
       <div class="col">
-        <a href="voyageurs_valides.php">
+        <a href="voyageurs.php">
           <canvas id="voyageursChart" width="400" height="300"></canvas>
         </a>
       </div>
@@ -122,19 +134,17 @@ $bailleurRefuse = $bailleurRefuse[0]['COUNT(id_bailleur)'];
   };
 
   const voyageursData = {
-    labels: ['Validés', 'En attente', 'Refusés'],
+    labels: ['Valide', 'Bloqué'],
     datasets: [{
       label: 'Voyageurs',
-      data: [50, 10, 3],
+      data: [<?=$voyageurValide?>, <?=$bailleurBloque?>],
       backgroundColor: [
         'rgba(255, 205, 86, 0.2)',
         'rgba(75, 192, 192, 0.2)',
-        'rgba(255, 99, 132, 0.2)',
       ],
       borderColor: [
         'rgba(255, 205, 86, 1)',
         'rgba(75, 192, 192, 1)',
-        'rgba(255, 99, 132, 1)',
       ],
       borderWidth: 1
     }]
