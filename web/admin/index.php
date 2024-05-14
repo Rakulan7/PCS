@@ -98,7 +98,7 @@ $bailleurBloque = $bailleurBloque[0]['COUNT(id_voyageur)'];
   const bailleursData = {
     labels: ['Validés', 'En attente', 'Refusés'],
     datasets: [{
-      label: 'Bailleurs',
+      label: 'Bailleurs (' + (<?=$bailleurAccept?> + <?=$bailleurWaiting?> + <?=$bailleurRefuse?>) + ')',
       data: [<?=$bailleurAccept?>, <?=$bailleurWaiting?>, <?=$bailleurRefuse?>],
       backgroundColor: [
         'rgba(54, 162, 235, 0.2)',
@@ -136,7 +136,7 @@ $bailleurBloque = $bailleurBloque[0]['COUNT(id_voyageur)'];
   const voyageursData = {
     labels: ['Valide', 'Bloqué'],
     datasets: [{
-      label: 'Voyageurs',
+      label: 'Voyageurs (' + (<?=$voyageurValide?> + <?=$bailleurBloque?>) + ')',
       data: [<?=$voyageurValide?>, <?=$bailleurBloque?>],
       backgroundColor: [
         'rgba(255, 205, 86, 0.2)',
