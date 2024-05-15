@@ -26,6 +26,16 @@ function searchFunction($inputId, $searchUrl, $type) {
                     } else {
                         status = " ";
                     }
+                } else if('$type' === 'prestataire') {
+                    if (user["accepte"] == 1 && user["refuse_par_admin"] == 0) {
+                        status = "Accepté";
+                    } else if ((user["accepte"] == 0 && user["refuse_par_admin"] == 0) || (user["accepte"] == null && user["refuse_par_admin"] == null)) {
+                        status = "En attente";
+                    } else if (user["accepte"] == 0 && user["refuse_par_admin"] == 1) {
+                        status = "Refusé";
+                    } else {
+                        status = " ";
+                    }
                 } else if ('$type' === 'voyageur') {
                     if (user["bloque"] == 1) {
                         status = "Bloqué";

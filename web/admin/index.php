@@ -37,6 +37,23 @@ $getVoyageurBloque->execute([]);
 $bailleurBloque = $getVoyageurBloque->fetchAll(PDO::FETCH_ASSOC);
 $bailleurBloque = $bailleurBloque[0]['COUNT(id_voyageur)'];
 
+// Partie Prestataire
+$getPrestataireAccept = $db->prepare("SELECT COUNT(id_prestataire) FROM prestataire WHERE accepte = 1");
+$getPrestataireAccept->execute([]);
+$prestataireAccept = $getPrestataireAccept->fetchAll(PDO::FETCH_ASSOC);
+$prestataireAccept = $prestataireAccept[0]['COUNT(id_prestataire)'];
+
+$getPrestataireWaiting = $db->prepare("SELECT COUNT(id_prestataire) FROM prestataire WHERE (accepte IS NULL AND refuse_par_admin IS NULL) OR (accepte = 0 AND refuse_par_admin = 0)");
+$getPrestataireWaiting->execute([]);
+$prestataireWaiting = $getPrestataireWaiting->fetchAll(PDO::FETCH_ASSOC);
+$prestataireWaiting = $prestataireWaiting[0]['COUNT(id_prestataire)'];
+
+$getPrestataireRefuse = $db->prepare("SELECT COUNT(id_prestataire) FROM prestataire WHERE refuse_par_admin = 1");
+$getPrestataireRefuse->execute([]);
+$prestataireRefuse = $getPrestataireRefuse->fetchAll(PDO::FETCH_ASSOC);
+$prestataireRefuse = $prestataireRefuse[0]['COUNT(id_prestataire)'];
+
+
 
 ?>
 
@@ -80,7 +97,7 @@ $bailleurBloque = $bailleurBloque[0]['COUNT(id_voyageur)'];
         </a>
       </div>
       <div class="col">
-        <a href="prestataires_valides.php">
+        <a href="prestataires.php">
           <canvas id="prestatairesChart" width="400" height="300"></canvas>
         </a>
       </div>
@@ -153,8 +170,8 @@ $bailleurBloque = $bailleurBloque[0]['COUNT(id_voyageur)'];
   const prestatairesData = {
     labels: ['Validés', 'En attente', 'Refusés'],
     datasets: [{
-      label: 'Prestataires',
-      data: [30, 5, 2],
+      label: 'Prestataires (' + (<?=$prestataireAccept?> + <?=$prestataireWaiting?> + <?=$prestataireRefuse?>) + ')',
+      data: [<?=$prestataireAccept?>, <?=$prestataireWaiting?>, <?=$prestataireRefuse?>],
       backgroundColor: [
         'rgba(153, 102, 255, 0.2)',
         'rgba(255, 159, 64, 0.2)',

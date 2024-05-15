@@ -27,10 +27,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         header("location: ../bdetails.php?id=". $bailleur_id ."&msg=Bailleur id ". $bailleur_id ." a bien été accepté !&err=false");
     } else {
         logActivity("../", "Bailleur id ". $bailleur_id ." n'a pas été accepté.");
-        header("location: ../bailleurs_status.php?msg=Bailleur id ". $bailleur_id ." n'a pas été accepté !&err=true");
+        header("location: ../bailleurs.php?msg=Bailleur id ". $bailleur_id ." n'a pas été accepté !&err=true");
     }
 
 } else {
     logActivity("../", "Une erreur est survenue, traitement annulé.");
-    header("location: ../bailleurs_status.php?msg=Une erreur est survenue, traitement annulé.&err=true");
+    header("location: ../bailleurs.php?msg=Une erreur est survenue, traitement annulé.&err=true");
 }
