@@ -87,7 +87,7 @@ $prestataireRefuse = $prestataireRefuse[0]['COUNT(id_prestataire)'];
         </a>
       </div>
       <div class="col">
-        <a href="biens_valides.php">
+        <a href="biens.php">
           <canvas id="biensChart" width="400" height="300"></canvas>
         </a>
       </div>
