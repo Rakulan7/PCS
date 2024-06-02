@@ -3,7 +3,7 @@
 function getDatabase(){
     try{
         $db = new PDO(
-            'mysql:host=localhost;dbname=pcs;charset=utf8',
+            'mysql:host=localhost;dbname=pcs_v2;charset=utf8',
             'root',
             '',
             [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]

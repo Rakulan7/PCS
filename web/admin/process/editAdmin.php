@@ -10,16 +10,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (
         isset($_POST["userId"]) && !empty($_POST["userId"]) &&
         isset($_POST["editUsername"]) && !empty($_POST["editUsername"]) &&
-        isset($_POST["editEmail"]) && !empty($_POST["editEmail"]) &&
-        isset($_POST["editFonction"]) && !empty($_POST["editFonction"])
+        isset($_POST["editPrenom"]) && !empty($_POST["editPrenom"]) &&
+        isset($_POST["editEmail"]) && !empty($_POST["editEmail"])
     ) {
         $id = $_POST["userId"];
         $username = $_POST["editUsername"];
+        $prenom = $_POST["editPrenom"];
         $email = $_POST["editEmail"];
-        $fonction = $_POST["editFonction"];
         $password = $_POST["editPassword"];
 
-        $query = "SELECT COUNT(*) FROM administrateur WHERE email = :email AND id_administrateur != :id";
+        $query = "SELECT COUNT(*) FROM utilisateur WHERE email = :email AND id_utilisateur != :id";
         $stmt = $db->prepare($query);
         $stmt->bindParam(":email", $email);
         $stmt->bindParam(":id", $id);
@@ -32,18 +32,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             exit();
         }
 
-        $query = "UPDATE administrateur SET username = :username, email = :email, fonction = :fonction";
-
+        $query = "UPDATE utilisateur SET nom = :nom, prenom = :prenom, email = :email";
         if (!empty($password)) {
             $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
-            $query .= ", password = :password";
+            $query .= ", mot_de_passe = :password";
         }
-
-        $query .= " WHERE id_administrateur = :id";
+        $query .= " WHERE id_utilisateur = :id";
+        
         $stmt = $db->prepare($query);
-        $stmt->bindParam(":username", $username);
+        $stmt->bindParam(":nom", $username);
+        $stmt->bindParam(":prenom", $prenom); // Corrected here from $username to $prenom
         $stmt->bindParam(":email", $email);
-        $stmt->bindParam(":fonction", $fonction);
         
         if (!empty($password)) {
             $stmt->bindParam(":password", $hashedPassword);
@@ -62,3 +61,4 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
 }
+?>

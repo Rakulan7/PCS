@@ -13,7 +13,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $id = $_POST["userId"];
         $username = $_POST["username"];
         
-        $query = "SELECT * FROM administrateur WHERE id_administrateur = :id";
+        $query = "SELECT * FROM utilisateur WHERE id_utilisateur = :id AND administrateur IS NOT NULL";
         $stmt = $db->prepare($query);
         $stmt->bindParam(":id", $id);
         $stmt->execute();
@@ -25,7 +25,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             exit();
         }
 
-        $query = "DELETE FROM administrateur WHERE id_administrateur = :id";
+        $query = "DELETE FROM utilisateur WHERE id_utilisateur = :id";
         $stmt = $db->prepare($query);
         $stmt->bindParam(":id", $id);
         if($stmt->execute()){

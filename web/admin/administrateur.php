@@ -13,12 +13,12 @@ $currentUserId = $_SESSION["admin_id"];
 
 // Récupérer tous les administrateurs
 $db = getDatabase();
-$administrateurs = $db->query("SELECT * FROM administrateur")->fetchAll(PDO::FETCH_ASSOC);
+$administrateurs = $db->query("SELECT * FROM utilisateur WHERE administrateur IS NOT NULL")->fetchAll(PDO::FETCH_ASSOC);
 
 // Vérifier si l'utilisateur en cours est dans la liste des administrateurs
 $isAdmin = false;
 foreach ($administrateurs as $admin) {
-    if ($admin['id_administrateur'] === $currentUserId) {
+    if ($admin['id_utilisateur'] === $currentUserId) {
         $isAdmin = true;
         break;
     }
@@ -52,8 +52,8 @@ foreach ($administrateurs as $admin) {
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th>Fonction</th>
-                    <th>Username</th>
+                    <th>Depuis le</th>
+                    <th>Prenom</th>
                     <th>Email</th>
                     <th>Action</th>
                 </tr>
@@ -61,23 +61,23 @@ foreach ($administrateurs as $admin) {
             <tbody>
                 <?php foreach ($administrateurs as $admin): ?>
                     <tr>
-                        <td><?php echo $admin['id_administrateur']; ?></td>
-                        <td><?php echo $admin['fonction']; ?></td>
-                        <td><?php echo $admin['username']; ?></td>
+                        <td><?php echo $admin['id_utilisateur']; ?></td>
+                        <td><?php echo $admin['administrateur']; ?></td>
+                        <td><?php echo $admin['prenom']; ?></td>
                         <td><?php echo $admin['email']; ?></td>
                         <td>
                             <!-- Boutons d'action -->
-                            <?php if ($admin['id_administrateur'] !== $_SESSION["admin_id"]): ?>
-                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#detailsAdminModal_<?php echo $admin['id_administrateur']; ?>">
+                            <?php if ($admin['id_utilisateur'] !== $_SESSION["admin_id"]): ?>
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#detailsAdminModal_<?php echo $admin['id_utilisateur']; ?>">
                                     <img src="assets/detail.png" alt="Détail">
                                 </button>
-                                <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editAdminModal_<?php echo $admin['id_administrateur']; ?>">
+                                <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editAdminModal_<?php echo $admin['id_utilisateur']; ?>">
                                     <img src="assets/edit.png" alt="Modifier">
                                 </button>
                                 <button type="button" class="btn btn-danger deleteUserBtn"
-                                        data-user-id="<?php echo $admin['id_administrateur']; ?>"
-                                        data-username="<?php echo $admin['username']; ?>"
-                                        data-bs-toggle="modal" data-bs-target="#confirmDeleteModal_<?php echo $admin['id_administrateur']; ?>">
+                                        data-user-id="<?php echo $admin['id_utilisateur']; ?>"
+                                        data-username="<?php echo $admin['prenom']; ?>"
+                                        data-bs-toggle="modal" data-bs-target="#confirmDeleteModal_<?php echo $admin['id_utilisateur']; ?>">
                                         <img src="assets/delete.png" alt="Supprimer">
                                 </button>
                             <?php else: ?>
@@ -110,19 +110,16 @@ foreach ($administrateurs as $admin) {
                     <!-- Contenu du modal -->
                     <form id="creerUtilisateurForm" action="process/newAdmin.php" method="post">
                         <div class="mb-3">
-                            <label for="nomUtilisateur" class="form-label">Nom d'utilisateur :</label>
+                            <label for="nomUtilisateur" class="form-label">Nom :</label>
                             <input type="text" class="form-control" id="nomUtilisateur" name="nomUtilisateur">
+                        </div>
+                        <div class="mb-3">
+                            <label for="prenomUtilisateur" class="form-label">Prenom :</label>
+                            <input type="text" class="form-control" id="prenomUtilisateur" name="prenomUtilisateur">
                         </div>
                         <div class="mb-3">
                             <label for="emailUtilisateur" class="form-label">Adresse email :</label>
                             <input type="email" class="form-control" id="emailUtilisateur" name="emailUtilisateur">
-                        </div>
-                        <div class="mb-3">
-                            <label for="fonctionUtilisateur" class="form-label">Fonction :</label>
-                            <select class="form-select" id="fonctionUtilisateur" name="fonctionUtilisateur">
-                                <option value="Administrateur">Administrateur</option>
-                                <option value="Support">Support</option>
-                            </select>
                         </div>
                         <div class="mb-3">
                             <label for="passwordUtilisateur" class="form-label">Mot de passe :</label>
@@ -145,7 +142,7 @@ foreach ($administrateurs as $admin) {
 
     <!-- Le modal de confirmation de suppression -->
     <?php foreach ($administrateurs as $admin): ?>
-        <div class="modal fade" id="confirmDeleteModal_<?php echo $admin['id_administrateur']; ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal fade" id="confirmDeleteModal_<?php echo $admin['id_utilisateur']; ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -153,15 +150,15 @@ foreach ($administrateurs as $admin) {
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        Êtes-vous sûr de vouloir supprimer cet utilisateur <?php echo $admin['username']; ?> ?
-                        <form id="deleteUserForm_<?php echo $admin['id_administrateur']; ?>" action="process/deleteAdmin.php" method="post">
-                            <input type="hidden" name="userId" value="<?php echo $admin['id_administrateur']; ?>">
-                            <input type="hidden" name="username" value="<?php echo $admin['username']; ?>">
+                        Êtes-vous sûr de vouloir supprimer cet utilisateur <?php echo $admin['prenom']; ?> ?
+                        <form id="deleteUserForm_<?php echo $admin['id_utilisateur']; ?>" action="process/deleteAdmin.php" method="post">
+                            <input type="hidden" name="userId" value="<?php echo $admin['id_utilisateur']; ?>">
+                            <input type="hidden" name="username" value="<?php echo $admin['prenom']; ?>">
                         </form>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
-                        <button type="button" class="btn btn-danger" onclick="document.getElementById('deleteUserForm_<?php echo $admin['id_administrateur']; ?>').submit();">Supprimer</button>
+                        <button type="button" class="btn btn-danger" onclick="document.getElementById('deleteUserForm_<?php echo $admin['id_utilisateur']; ?>').submit();">Supprimer</button>
                     </div>
                 </div>
             </div>
@@ -170,7 +167,7 @@ foreach ($administrateurs as $admin) {
 
     <!-- Le modal d'édition de l'administrateur -->
     <?php foreach ($administrateurs as $admin): ?>
-        <div class="modal fade" id="editAdminModal_<?php echo $admin['id_administrateur']; ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal fade" id="editAdminModal_<?php echo $admin['id_utilisateur']; ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -179,22 +176,19 @@ foreach ($administrateurs as $admin) {
                     </div>
                     <div class="modal-body">
                         <!-- Contenu du modal -->
-                        <form id="editAdminForm_<?php echo $admin['id_administrateur']; ?>" action="process/editAdmin.php" method="post">
-                            <input type="hidden" name="userId" value="<?php echo $admin['id_administrateur']; ?>"> <!-- Champ userId caché -->
+                        <form id="editAdminForm_<?php echo $admin['id_utilisateur']; ?>" action="process/editAdmin.php" method="post">
+                            <input type="hidden" name="userId" value="<?php echo $admin['id_utilisateur']; ?>"> <!-- Champ userId caché -->
                             <div class="mb-3">
-                                <label for="editUsername" class="form-label">Nom d'utilisateur :</label>
-                                <input type="text" class="form-control" id="editUsername" name="editUsername" value="<?php echo $admin['username']; ?>">
+                                <label for="editUsername" class="form-label">Nom :</label>
+                                <input type="text" class="form-control" id="editUsername" name="editUsername" value="<?php echo $admin['nom']; ?>">
+                            </div>
+                            <div class="mb-3">
+                                <label for="editPrenom" class="form-label">Prenom :</label>
+                                <input type="text" class="form-control" id="editPrenom" name="editPrenom" value="<?php echo $admin['prenom']; ?>">
                             </div>
                             <div class="mb-3">
                                 <label for="editEmail" class="form-label">Adresse email :</label>
                                 <input type="email" class="form-control" id="editEmail" name="editEmail" value="<?php echo $admin['email']; ?>">
-                            </div>
-                            <div class="mb-3">
-                                <label for="editFonction" class="form-label">Fonction :</label>
-                                <select class="form-select" id="editFonction" name="editFonction">
-                                    <option value="Administrateur" <?php if ($admin['fonction'] === 'Administrateur') echo 'selected'; ?>>Administrateur</option>
-                                    <option value="Support" <?php if ($admin['fonction'] === 'Support') echo 'selected'; ?>>Support</option>
-                                </select>
                             </div>
                             <div class="mb-3">
                                 <label for="editPassword" class="form-label">Nouveau mot de passe :</label>
@@ -210,7 +204,7 @@ foreach ($administrateurs as $admin) {
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
-                        <button type="submit" onclick="document.getElementById('editAdminForm_<?php echo $admin['id_administrateur']; ?>').submit();" class="btn btn-primary">Enregistrer</button>
+                        <button type="submit" onclick="document.getElementById('editAdminForm_<?php echo $admin['id_utilisateur']; ?>').submit();" class="btn btn-primary">Enregistrer</button>
                     </div>
                 </div>
             </div>
@@ -219,7 +213,7 @@ foreach ($administrateurs as $admin) {
 
     <!-- Le modal de détails de l'administrateur -->
     <?php foreach ($administrateurs as $admin): ?>
-        <div class="modal fade" id="detailsAdminModal_<?php echo $admin['id_administrateur']; ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal fade" id="detailsAdminModal_<?php echo $admin['id_utilisateur']; ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -228,12 +222,11 @@ foreach ($administrateurs as $admin) {
                     </div>
                     <div class="modal-body">
                         <!-- Contenu des détails de l'administrateur -->
-                        <p><strong>ID: </strong><?php echo $admin['id_administrateur']; ?></p>
-                        <p><strong>Username: </strong><?php echo $admin['username']; ?></p>
+                        <p><strong>ID: </strong><?php echo $admin['id_utilisateur']; ?></p>
+                        <p><strong>Nom: </strong><?php echo $admin['nom']; ?></p>
+                        <p><strong>Prenom: </strong><?php echo $admin['prenom']; ?></p>
                         <p><strong>Email: </strong><?php echo $admin['email']; ?></p>
-                        <p><strong>Fonction: </strong><?php echo $admin['fonction']; ?></p>
-                        <p><strong>Date de création: </strong><?php echo $admin['creationDate']; ?></p>
-                        <p><strong>Créateur: </strong><?php echo $admin['adminCreate']; ?></p>
+                        <p><strong>Date de création: </strong><?php echo $admin['administrateur']; ?></p>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>

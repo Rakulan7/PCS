@@ -11,47 +11,47 @@ logActivity("", "page index.php");
 $db = getDatabase();
 
 // Partie Bailleur
-$getBailleurAccept = $db->prepare("SELECT COUNT(id_bailleur) FROM bailleur WHERE accepte = 1");
+$getBailleurAccept = $db->prepare("SELECT COUNT(id_utilisateur) FROM utilisateur WHERE bailleur_accept = 1 AND bailleur IS NOT NULL AND bailleur_refus = 0");
 $getBailleurAccept->execute([]);
 $bailleurAccept = $getBailleurAccept->fetchAll(PDO::FETCH_ASSOC);
-$bailleurAccept = $bailleurAccept[0]['COUNT(id_bailleur)'];
+$bailleurAccept = $bailleurAccept[0]['COUNT(id_utilisateur)'];
 
-$getBailleurWaiting = $db->prepare("SELECT COUNT(id_bailleur) FROM bailleur WHERE (accepte is NULL AND refusee is NULL) OR  (accepte = 0 AND refusee = 0)");
+$getBailleurWaiting = $db->prepare("SELECT COUNT(id_utilisateur) FROM utilisateur WHERE bailleur_accept = 0 AND bailleur_refus = 0");
 $getBailleurWaiting->execute([]);
 $bailleurWaiting = $getBailleurWaiting->fetchAll(PDO::FETCH_ASSOC);
-$bailleurWaiting = $bailleurWaiting[0]['COUNT(id_bailleur)'];
+$bailleurWaiting = $bailleurWaiting[0]['COUNT(id_utilisateur)'];
 
-$getBailleurRefuse = $db->prepare("SELECT COUNT(id_bailleur) FROM bailleur WHERE refusee = 1");
+$getBailleurRefuse = $db->prepare("SELECT COUNT(id_utilisateur) FROM utilisateur WHERE bailleur_refus = 1");
 $getBailleurRefuse->execute([]);
 $bailleurRefuse = $getBailleurRefuse->fetchAll(PDO::FETCH_ASSOC);
-$bailleurRefuse = $bailleurRefuse[0]['COUNT(id_bailleur)'];
+$bailleurRefuse = $bailleurRefuse[0]['COUNT(id_utilisateur)'];
 
 // Partie Voyageur
-$getVoyageurValide = $db->prepare("SELECT COUNT(id_voyageur) FROM voyageur WHERE bloque = 0");
+$getVoyageurValide = $db->prepare("SELECT COUNT(id_utilisateur) FROM utilisateur WHERE voyageur IS NOT NULL");
 $getVoyageurValide->execute([]);
 $voyageurValide = $getVoyageurValide->fetchAll(PDO::FETCH_ASSOC);
-$voyageurValide = $voyageurValide[0]['COUNT(id_voyageur)'];
+$voyageurValide = $voyageurValide[0]['COUNT(id_utilisateur)'];
 
-$getVoyageurBloque = $db->prepare("SELECT COUNT(id_voyageur) FROM voyageur WHERE bloque = 1");
+$getVoyageurBloque = $db->prepare("SELECT COUNT(id_utilisateur) FROM utilisateur WHERE bloque = 1");
 $getVoyageurBloque->execute([]);
 $bailleurBloque = $getVoyageurBloque->fetchAll(PDO::FETCH_ASSOC);
-$bailleurBloque = $bailleurBloque[0]['COUNT(id_voyageur)'];
+$bailleurBloque = $bailleurBloque[0]['COUNT(id_utilisateur)'];
 
 // Partie Prestataire
-$getPrestataireAccept = $db->prepare("SELECT COUNT(id_prestataire) FROM prestataire WHERE accepte = 1");
+$getPrestataireAccept = $db->prepare("SELECT COUNT(id_utilisateur) FROM utilisateur WHERE prestataire_accept = 1 AND prestataire IS NOT NULL AND prestataire_refus = 0");
 $getPrestataireAccept->execute([]);
 $prestataireAccept = $getPrestataireAccept->fetchAll(PDO::FETCH_ASSOC);
-$prestataireAccept = $prestataireAccept[0]['COUNT(id_prestataire)'];
+$prestataireAccept = $prestataireAccept[0]['COUNT(id_utilisateur)'];
 
-$getPrestataireWaiting = $db->prepare("SELECT COUNT(id_prestataire) FROM prestataire WHERE (accepte IS NULL AND refuse_par_admin IS NULL) OR (accepte = 0 AND refuse_par_admin = 0)");
+$getPrestataireWaiting = $db->prepare("SELECT COUNT(id_utilisateur) FROM utilisateur WHERE prestataire_accept = 0 AND prestataire_refus = 0");
 $getPrestataireWaiting->execute([]);
 $prestataireWaiting = $getPrestataireWaiting->fetchAll(PDO::FETCH_ASSOC);
-$prestataireWaiting = $prestataireWaiting[0]['COUNT(id_prestataire)'];
+$prestataireWaiting = $prestataireWaiting[0]['COUNT(id_utilisateur)'];
 
-$getPrestataireRefuse = $db->prepare("SELECT COUNT(id_prestataire) FROM prestataire WHERE refuse_par_admin = 1");
+$getPrestataireRefuse = $db->prepare("SELECT COUNT(id_utilisateur) FROM utilisateur WHERE prestataire_refus = 1");
 $getPrestataireRefuse->execute([]);
 $prestataireRefuse = $getPrestataireRefuse->fetchAll(PDO::FETCH_ASSOC);
-$prestataireRefuse = $prestataireRefuse[0]['COUNT(id_prestataire)'];
+$prestataireRefuse = $prestataireRefuse[0]['COUNT(id_utilisateur)'];
 
 
 

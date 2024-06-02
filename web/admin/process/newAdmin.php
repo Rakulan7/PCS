@@ -10,12 +10,12 @@ $db = getDatabase();
 date_default_timezone_set('Europe/Paris');
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    if(isset($_POST["nomUtilisateur"], $_POST["emailUtilisateur"], $_POST["fonctionUtilisateur"], $_POST["passwordUtilisateur"], $_POST["passwordUtilisateurCheck"])
-    && !empty($_POST["nomUtilisateur"]) && !empty($_POST["emailUtilisateur"]) && !empty($_POST["passwordUtilisateur"]) && !empty($_POST["passwordUtilisateurCheck"])) {
+    if(isset($_POST["nomUtilisateur"], $_POST["prenomUtilisateur"], $_POST["emailUtilisateur"], $_POST["passwordUtilisateur"], $_POST["passwordUtilisateurCheck"])
+    && !empty($_POST["nomUtilisateur"]) && !empty($_POST["prenomUtilisateur"]) && !empty($_POST["emailUtilisateur"]) && !empty($_POST["passwordUtilisateur"]) && !empty($_POST["passwordUtilisateurCheck"])) {
 
         $nomUtilisateur = $_POST["nomUtilisateur"];
+        $prenomUtilisateur = $_POST["prenomUtilisateur"];
         $emailUtilisateur = $_POST["emailUtilisateur"];
-        $fonctionUtilisateur = $_POST["fonctionUtilisateur"];
         $passwordUtilisateur = $_POST["passwordUtilisateur"];
         $passwordUtilisateurCheck = $_POST["passwordUtilisateurCheck"];
 
@@ -31,7 +31,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             exit();
         }
 
-        $query = "SELECT * FROM administrateur WHERE email = :email";
+        $query = "SELECT * FROM utilisateur WHERE email = :email AND administrateur IS NOT NULL";
         $stmt = $db->prepare($query);
         $stmt->bindParam(":email", $emailUtilisateur);
         $stmt->execute();
@@ -43,17 +43,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             exit();
         }
 
-        $date = date("Y/m/d H:i:s");
+        $date = date("Y/m/d");
 
-        $insertQuery = "INSERT INTO administrateur (username, email, fonction, password, creationDate, adminCreate) VALUES (:nom, :email, :fonction, :mot_de_passe, :creationDate, :createur)";
+        $insertQuery = "INSERT INTO utilisateur (nom, prenom, email, mot_de_passe, administrateur) VALUES (:nom, :prenom, :email, :mot_de_passe, :creationDate)";
         $insertStmt = $db->prepare($insertQuery);
         $insertStmt->bindParam(":nom", $nomUtilisateur);
+        $insertStmt->bindParam(":prenom", $prenomUtilisateur);
         $insertStmt->bindParam(":email", $emailUtilisateur);
-        $insertStmt->bindParam(":fonction", $fonctionUtilisateur);
         $hashedPassword = password_hash($passwordUtilisateur, PASSWORD_BCRYPT);
         $insertStmt->bindParam(":mot_de_passe", $hashedPassword);
         $insertStmt->bindParam(":creationDate", $date);
-        $insertStmt->bindParam(":createur", $_SESSION["admin_id"]);
 
         if ($insertStmt->execute()) {
             logActivity("../", "L'administrateur ". $nomUtilisateur ." a été créé avec succès.");

@@ -12,7 +12,7 @@ if (!isset($_POST["email"]) || !isset($_POST["password"])
 }
 
 $db = getDatabase();
-$select = $db->prepare("SELECT * FROM administrateur WHERE email = :email");
+$select = $db->prepare("SELECT * FROM utilisateur WHERE email = :email AND administrateur IS NOT NULL");
 $select->execute([
     "email" => $_POST["email"]
 ]);
@@ -26,21 +26,21 @@ if (!$resultat) {
     exit;
 }
 
-if (password_verify($_POST["password"], $resultat["password"])) {
+if (password_verify($_POST["password"], $resultat["mot_de_passe"])) {
     
     $temps_cookie = 14400;
     setcookie("temps", time(), time() + $temps_cookie, "/");
 
     session_start();
     $_SESSION["admin_email"] = $resultat["email"];
-    $_SESSION["admin_id"] = $resultat["id_administrateur"];
+    $_SESSION["admin_id"] = $resultat["id_utilisateur"];
     logActivity("../", "Connexion réussie");
     header("location: ../index.php");
     exit;
 
 
 } else {
-    logActivity("../", "Connexion réussie", $resultat["administrateur_id"]);
+    logActivity("../", "Connexion réussie", $resultat["id_utilisateur"]);
     header("location: ../login.php?msg=Identifiants incorrects&err=true");
     exit;
 }
