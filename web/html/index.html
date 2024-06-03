@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Accueil</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="js/script.js" defer></script>
+  <script src="js/script1.js" defer></script>
+  <script src="js/script3.js" defer></script>
+  <script src="js/BurgerMenu.js" defer></script>
+</head>
+<body onload="onload()">
+  <header>k
+    <div class="header">
+      <div class="header-container">
+        <div class="neutro"><a href="index.html"><img src="img/pcs_logo_web-removebg-preview.png"></a></div>
+        <ul class="try">
+          <li class="dropdown">
+            <a href="#" id="openModal" class="login-link">S'IDENTIFIER</a>
+          </li>
+          
+          <div id="container1" class="container">
+            <span class="close">&times;</span>
+            <h1>M'IDENTIFIER</h1>
+            <div id="tabs">
+              <button class="active" onclick="showLogin()">Connexion</button>
+              <button id="inscriptionBtn" onclick="showSignup()">Inscription</button>
+            </div>
+            <form action="{{ url_for('traitement') }}" method="post" id="login-form">
+              <input type="email" id="emailLogin" name="email" placeholder="Adresse e-mail" required>
+              <br>
+              <input type="password" id="passwordLogin" name="password" placeholder="Mot de passe" required>
+              <br>
+              <br>
+              <button type="submit">Se connecter</button>
+            </form>
+            <form action="{{ url_for('traitement') }}" method="post" id="signup-form">
+              <input type="text" id="name" name="name" placeholder="Nom" required>
+              <br>
+              <input type="email" id="emailSignup" name="email" placeholder="Adresse e-mail" required>
+              <br>
+              <input type="password" id="passwordSignup" name="password" placeholder="Mot de passe" required>
+              <br>
+              <br>
+              <button type="submit">S'inscrire</button>
+            </form>
+        </div>
+
+          
+            <img id="searchIcon" class="searchIcon" src="img/icons8-loupe-50.png">
+            <form id="searchForm">
+                <input type="text" name="searchQuery" placeholder="Rechercher...">
+                <button type="submit">Rechercher</button>
+            </form>
+            <script>
+                document.getElementById("searchIcon").addEventListener("click", function() {
+                var searchForm = document.getElementById("searchForm");
+                searchForm.classList.toggle("visible");
+            });
+            </script>
+            <img src="logo/menu-btn.png" alt="menu-hamburger" class="menu-hamburger">
+            <button class="btn-toogle" onclick="darkmode()" style="color: #93441a;">&#x261B;</button> <!--style="top: 92.6%;" -->
+            <script src="js/DarkLightMode.js"></script>
+        </ul>
+      </div>
+    </div>
+  </header>
+  <main>
+    <div class="main">
+        <div class="slide-container2">        
+            <div class="custom-slider fade">
+              <a href="maisons/maison1.html">
+              <img class="slide-img" src="img/zyro-image (1).png">
+              <!--<div class="slide-text2">PARIS CARETAKER SERVICES</div></a>-->
+            </div>
+            <div class="custom-slider fade">
+              <a href="maisons/maison2.html">
+              <img class="slide-img" src="img/maison2.png">
+              <div class="slide-text">A LA UNE</div></a>
+            </div>
+            <div class="custom-slider fade">
+              <a href="maisons/maison3.html">
+              <img class="slide-img" src="img/maison2.png">
+              <div class="slide-text">A LA UNE</div></a>
+            </div>
+            <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+            <a class="next" onclick="plusSlides(1)">&#10095;</a>
+        </div>
+        <div class="slide-dot">
+            <span class="dot" onclick="currentSlide(1)"></span> 
+            <span class="dot" onclick="currentSlide(2)"></span> 
+            <span class="dot" onclick="currentSlide(3)"></span>
+        </div>
+    </div>
+  </main>
+</body>
+</html>
