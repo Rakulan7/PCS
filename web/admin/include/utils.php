@@ -43,3 +43,7 @@ function displayError($msg, $err) {
         echo '';
     }
 }
+
+function displayIcon($path){
+    echo '<link rel="icon" href="'. $path .'assets/logo.png" type="image/png">';
+}
