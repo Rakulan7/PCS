@@ -6,11 +6,6 @@ checkSessionElseLogin("../");
 include("../log.php");
 logActivity("../", "page refuse bailleur de " . $_POST["id"]);
 
-echo $bailleur_id;
-
-
-
-var_dump($bailleur);
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
@@ -18,7 +13,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $db = getDatabase();
 
-    $getBailleur = $db->prepare("UPDATE bailleur SET accepte = 1, refusee = 0 WHERE id_bailleur = ?");
+    $getBailleur = $db->prepare("UPDATE utilisateur SET bailleur_accept = 1, bailleur_refus = 0 WHERE id_utilisateur = ?");
     $getBailleur->execute([$bailleur_id]);
     $rowsAffected = $getBailleur->rowCount();
 

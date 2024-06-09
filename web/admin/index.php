@@ -27,12 +27,12 @@ $bailleurRefuse = $getBailleurRefuse->fetchAll(PDO::FETCH_ASSOC);
 $bailleurRefuse = $bailleurRefuse[0]['COUNT(id_utilisateur)'];
 
 // Partie Voyageur
-$getVoyageurValide = $db->prepare("SELECT COUNT(id_utilisateur) FROM utilisateur WHERE voyageur IS NOT NULL");
+$getVoyageurValide = $db->prepare("SELECT COUNT(id_utilisateur) FROM utilisateur WHERE voyageur IS NOT NULL AND bloque IS NULL");
 $getVoyageurValide->execute([]);
 $voyageurValide = $getVoyageurValide->fetchAll(PDO::FETCH_ASSOC);
 $voyageurValide = $voyageurValide[0]['COUNT(id_utilisateur)'];
 
-$getVoyageurBloque = $db->prepare("SELECT COUNT(id_utilisateur) FROM utilisateur WHERE bloque = 1");
+$getVoyageurBloque = $db->prepare("SELECT COUNT(id_utilisateur) FROM utilisateur WHERE bloque IS NOT NULL AND voyageur IS NOT NULL");
 $getVoyageurBloque->execute([]);
 $bailleurBloque = $getVoyageurBloque->fetchAll(PDO::FETCH_ASSOC);
 $bailleurBloque = $bailleurBloque[0]['COUNT(id_utilisateur)'];

@@ -14,7 +14,7 @@ if(isset($_POST["id"])) {
     $db = getDatabase();
 
     // Récupère les informations du bailleur en attente avec l'ID spécifié
-    $getBailleur = $db->prepare("SELECT * FROM bailleur WHERE id_bailleur = ?");
+    $getBailleur = $db->prepare("SELECT * FROM utilisateur WHERE id_utilisateur = ? AND bailleur IS NOT NULL");
     $getBailleur->execute([$bailleur_id]);
     $bailleur = $getBailleur->fetch(PDO::FETCH_ASSOC);
 

@@ -10,7 +10,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $reason = htmlspecialchars($_POST["reason"]);
 
         $db = getDatabase();
-        $updateBailleur = $db->prepare("UPDATE bailleur SET accepte = 0, refusee = 1, raison_refus = ? WHERE id_bailleur = ?");
+        $updateBailleur = $db->prepare("UPDATE utilisateur SET bailleur_accept = 0, bailleur_refus = 1, raison_refus = ? WHERE id_utilisateur = ?");
         $updateBailleur->execute([$reason, $bailleur_id]);
 
         logActivity("../", "Le bailleur id ". $bailleur_id ." a bien été refusé.");

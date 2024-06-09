@@ -17,8 +17,8 @@ if(isset($_POST["id"])) {
 
     $db = getDatabase();
 
-    $updateVoyageur = $db->prepare("UPDATE voyageur SET bloque = 1, raison_bloque = ? WHERE id_voyageur = ?");
-    $updateVoyageur->execute([$reason, $voyageur_id]);
+    $updateVoyageur = $db->prepare("UPDATE utilisateur SET bloque = ?, raison_refus = ? WHERE id_utilisateur = ?");
+    $updateVoyageur->execute([date("Y-m-d"), $reason, $voyageur_id]);
 
     logActivity("../", "Le voyageur " . $voyageur_id . " a été bloqué avec succés");
     header("Location: ../vdetails.php?id=". $voyageur_id ."&msg=Le voyageur a été bloqué avec succès.&err=false");

@@ -18,7 +18,7 @@ $bailleurId = htmlspecialchars($_GET["id"]);
 
 $db = getDatabase();
 
-$getBailleur = $db->prepare("SELECT * FROM voyageur WHERE id_voyageur = ?");
+$getBailleur = $db->prepare("SELECT * FROM utilisateur WHERE id_utilisateur = ?");
 $getBailleur->execute([$bailleurId]);
 $bailleur = $getBailleur->fetch(PDO::FETCH_ASSOC);
 
@@ -30,18 +30,18 @@ if(!$bailleur) {
 
 $genre = ($bailleur['genre'] == 0) ? 'Homme' : 'Femme';
 
-if ($bailleur["bloque"] == 1) {
-    $status = "Bloqué";
-    $reason = ($bailleur["raison_bloque"]) ? $bailleur["raison_bloque"] : "";
+if ($bailleur["bloque"] != null) {
+    $status = "Bloqué le " . $bailleur["bloque"];
+    $reason = ($bailleur["raison_refus"]) ? $bailleur["raison_refus"] : "";
 } else {
     $status = "Validé";
     $reason = "";
 }
 
-if ($bailleur["bloque"] == 0){
+if ($bailleur["bloque"] == null){
     $buttons = '
     <div class="mt-3">
-        <a href="bloque_voyageur.php?id='.$bailleur['id_voyageur'].'" class="btn btn-danger mr-2">Bloquer</a>
+        <a href="bloque_voyageur.php?id='.$bailleur['id_utilisateur'].'" class="btn btn-danger mr-2">Bloquer</a>
         <a href="voyageurs.php" class="btn btn-secondary mr-2 ">Retour</a>
     </div>
     ';
@@ -128,8 +128,7 @@ if ($bailleur["bloque"] == 0){
                     <p class="card-text"><strong>Pays du téléphone :</strong> <?php echo $bailleur['pays_telephone']; ?></p>
                     <p class="card-text"><strong>Date d'inscription :</strong> <?php echo $bailleur['date_inscription']; ?></p>
                     <p class="card-text"><strong>Status :</strong> <?php echo $status; ?></p>
-                    <p class="card-text"><strong>Bloqué :</strong> <?php echo ($bailleur['bloque'] == 1) ? 'Oui' : 'Non'; ?></p>
-                    <?php if ($bailleur['bloque'] == 1): ?>
+                    <?php if ($bailleur['bloque'] != null): ?>
                         <p class="card-text"><strong>Raison du blocage :</strong> <?php echo $reason; ?></p>
                     <?php endif; ?>
                 </div>

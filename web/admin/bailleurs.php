@@ -12,19 +12,19 @@ include("function.php");
 
 $db = getDatabase();
 
-$getBailleurAll = $db->prepare("SELECT * FROM bailleur");
+$getBailleurAll = $db->prepare("SELECT * FROM utilisateur WHERE bailleur_accept = 1 OR bailleur_accept = 0 OR bailleur_refus = 1 OR bailleur_refus = 0");
 $getBailleurAll->execute([]);
 $bailleurAll = $getBailleurAll->fetchAll(PDO::FETCH_ASSOC);
 
-$getBailleurAccept = $db->prepare("SELECT * FROM bailleur WHERE accepte = 1");
+$getBailleurAccept = $db->prepare("SELECT * FROM utilisateur WHERE bailleur_accept = 1 AND bailleur_refus = 0");
 $getBailleurAccept->execute([]);
 $bailleurAccept = $getBailleurAccept->fetchAll(PDO::FETCH_ASSOC);
 
-$getBailleurWaiting = $db->prepare("SELECT * FROM bailleur WHERE (accepte is NULL AND refusee is NULL) OR  (accepte = 0 AND refusee = 0)");
+$getBailleurWaiting = $db->prepare("SELECT * FROM utilisateur WHERE bailleur_accept = 0 AND bailleur_refus = 0");
 $getBailleurWaiting->execute([]);
 $bailleurWaiting = $getBailleurWaiting->fetchAll(PDO::FETCH_ASSOC);
 
-$getBailleurRefuses = $db->prepare("SELECT * FROM bailleur WHERE refusee = 1");
+$getBailleurRefuses = $db->prepare("SELECT * FROM utilisateur WHERE bailleur_accept = 0 AND bailleur_refus = 1");
 $getBailleurRefuses->execute([]);
 $bailleurRefuses = $getBailleurRefuses->fetchAll(PDO::FETCH_ASSOC);
 
@@ -94,11 +94,11 @@ $bailleurRefuses = $getBailleurRefuses->fetchAll(PDO::FETCH_ASSOC);
                                 <tbody>
                                     <?php
                                     foreach ($bailleurAll as $bailleur) {
-                                        if ($bailleur["accepte"] == 1 && $bailleur["refusee"] == 0) {
+                                        if ($bailleur["bailleur_accept"] == 1 && $bailleur["bailleur_refus"] == 0) {
                                             $status = "Accepté";
-                                        } else if (($bailleur["accepte"] == 0 && $bailleur["refusee"] == 0) || ($bailleur["accepte"] == null && $bailleur["refusee"] == null)) {
+                                        } else if ($bailleur["bailleur_accept"] == 0 && $bailleur["bailleur_refus"] == 0) {
                                             $status = "En attente";
-                                        } else if ($bailleur["accepte"] == 0 && $bailleur["refusee"] == 1) {
+                                        } else if ($bailleur["bailleur_accept"] == 0 && $bailleur["bailleur_refus"] == 1) {
                                             $status = "Refusé";
                                         } else {
                                             $status = "";
@@ -110,7 +110,7 @@ $bailleurRefuses = $getBailleurRefuses->fetchAll(PDO::FETCH_ASSOC);
                                         echo "<td>" . $bailleur['pays_telephone'] . "</td>";
                                         echo "<td>" . $bailleur['numero_telephone'] . "</td>";
                                         echo "<td>" . $status . "</td>";
-                                        echo "<td><a href='bdetails.php?id=" . $bailleur['id_bailleur'] . "' class='btn btn-primary'>Détails</a></td>";
+                                        echo "<td><a href='bdetails.php?id=" . $bailleur['id_utilisateur'] . "' class='btn btn-primary'>Détails</a></td>";
                                         echo "</tr>";
                                     }
                                     ?>
@@ -141,7 +141,7 @@ $bailleurRefuses = $getBailleurRefuses->fetchAll(PDO::FETCH_ASSOC);
                                         echo "<td>" . $bailleur['email'] . "</td>";
                                         echo "<td>" . $bailleur['pays_telephone'] . "</td>";
                                         echo "<td>" . $bailleur['numero_telephone'] . "</td>";
-                                        echo "<td><a href='bdetails.php?id=" . $bailleur['id_bailleur'] . "' class='btn btn-primary'>Détails</a></td>";
+                                        echo "<td><a href='bdetails.php?id=" . $bailleur['id_utilisateur'] . "' class='btn btn-primary'>Détails</a></td>";
                                         echo "</tr>";
                                     }
                                     ?>
@@ -172,7 +172,7 @@ $bailleurRefuses = $getBailleurRefuses->fetchAll(PDO::FETCH_ASSOC);
                                         echo "<td>" . $bailleur['email'] . "</td>";
                                         echo "<td>" . $bailleur['pays_telephone'] . "</td>";
                                         echo "<td>" . $bailleur['numero_telephone'] . "</td>";
-                                        echo "<td><a href='bdetails.php?id=" . $bailleur['id_bailleur'] . "' class='btn btn-primary'>Détails</a></td>";
+                                        echo "<td><a href='bdetails.php?id=" . $bailleur['id_utilisateur'] . "' class='btn btn-primary'>Détails</a></td>";
                                         echo "</tr>";
                                     }
                                     ?>
@@ -203,7 +203,7 @@ $bailleurRefuses = $getBailleurRefuses->fetchAll(PDO::FETCH_ASSOC);
                                         echo "<td>" . $bailleur['email'] . "</td>";
                                         echo "<td>" . $bailleur['pays_telephone'] . "</td>";
                                         echo "<td>" . $bailleur['numero_telephone'] . "</td>";
-                                        echo "<td><a href='bdetails.php?id=" . $bailleur['id_bailleur'] . "' class='btn btn-primary'>Détails</a></td>";
+                                        echo "<td><a href='bdetails.php?id=" . $bailleur['id_utilisateur'] . "' class='btn btn-primary'>Détails</a></td>";
                                         echo "</tr>";
                                     }
                                     ?>

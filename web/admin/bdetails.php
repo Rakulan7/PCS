@@ -18,7 +18,7 @@ $bailleurId = htmlspecialchars($_GET["id"]);
 
 $db = getDatabase();
 
-$getBailleur = $db->prepare("SELECT * FROM bailleur WHERE id_bailleur = ?");
+$getBailleur = $db->prepare("SELECT * FROM utilisateur WHERE id_utilisateur = ? AND bailleur IS NOT NULL");
 $getBailleur->execute([$bailleurId]);
 $bailleur = $getBailleur->fetch(PDO::FETCH_ASSOC);
 
@@ -30,35 +30,35 @@ if(!$bailleur) {
 
 $genre = ($bailleur['genre'] == 0) ? 'Homme' : 'Femme';
 
-if (($bailleur["accepte"] == NULL && $bailleur["refusee"] == NULL) || ($bailleur["accepte"] == 0 && $bailleur["refusee"] == 0)){
+if ($bailleur["bailleur_accept"] == 0 && $bailleur["bailleur_refus"] == 0){
     $buttons = '
     <div class="mt-3">
         <form action="process/accept_bailleur.php" method="POST" class="d-inline">
-            <input type="hidden" name="id" value="' . $bailleur['id_bailleur'] . '">
+            <input type="hidden" name="id" value="' . $bailleur['id_utilisateur'] . '">
             <button type="submit" class="btn btn-success mr-2">Accepter</button>
         </form>
         <form action="refuses_bailleur.php" method="POST" class="d-inline">
-            <input type="hidden" name="id" value=' . $bailleur['id_bailleur'] . '">
+            <input type="hidden" name="id" value=' . $bailleur['id_utilisateur'] . '">
             <button type="submit" class="btn btn-danger mr-2">Refuser</button>
         </form>
         <a href="bailleurs.php" class="btn btn-secondary mr-2 ">Retour</a>
     </div>
     ';
-} elseif ($bailleur["accepte"] == 1 && $bailleur["refusee"] == 0) {
+} elseif ($bailleur["bailleur_accept"] == 1 && $bailleur["bailleur_refus"] == 0) {
     $buttons = '
     <div class="mt-3">
         <form action="refuses_bailleur.php" method="POST" class="d-inline">
-            <input type="hidden" name="id" value="'. $bailleur['id_bailleur'] .'">
+            <input type="hidden" name="id" value="'. $bailleur['id_utilisateur'] .'">
             <button type="submit" class="btn btn-danger mr-2">Refuser</button>
         </form>
         <a href="bailleurs.php" class="btn btn-secondary mr-2">Retour</a>
     </div>
     ';
-} elseif ($bailleur["accepte"] == 0 && $bailleur["refusee"] == 1) {
+} elseif ($bailleur["bailleur_accept"] == 0 && $bailleur["bailleur_refus"] == 1) {
     $buttons = '
     <div class="mt-3">
         <form action="process/accept_bailleur.php" method="POST" class="d-inline">
-            <input type="hidden" name="id" value="'. $bailleur['id_bailleur'] .'">
+            <input type="hidden" name="id" value="'. $bailleur['id_utilisateur'] .'">
             <button type="submit" class="btn btn-success mr-2">Accepter</button>
         </form>
         <a href="bailleurs.php" class="btn btn-secondary mr-2">Retour</a>
@@ -147,14 +147,14 @@ if (($bailleur["accepte"] == NULL && $bailleur["refusee"] == NULL) || ($bailleur
                     <p class="card-text"><strong>Date d'inscription :</strong> <?php echo $bailleur['date_inscription']; ?></p>
                     <p class="card-text"><strong>Code banque :</strong> <?php echo $bailleur['code_banque']; ?></p>
                     <p class="card-text"><strong>Code guichet :</strong> <?php echo $bailleur['code_guichet']; ?></p>
-                    <p class="card-text"><strong>Numéro de compte :</strong> <?php echo $bailleur['numero_compte']; ?></p>
+                    <p class="card-text"><strong>Numéro de compte :</strong> <?php echo $bailleur['numero_de_compte']; ?></p>
                     <p class="card-text"><strong>Clé RIB :</strong> <?php echo $bailleur['cle_rib']; ?></p>
                     <p class="card-text"><strong>IBAN :</strong> <?php echo $bailleur['iban']; ?></p>
-                    <p class="card-text"><strong>BIC/SWIFT :</strong> <?php echo $bailleur['bic_swift']; ?></p>
+                    <p class="card-text"><strong>BIC/SWIFT :</strong> <?php echo $bailleur['bic']; ?></p>
                     <p class="card-text"><strong>URL RIB :</strong> <?php echo $bailleur['url_rib']; ?></p>
-                    <p class="card-text"><strong>Accepté :</strong> <?php echo ($bailleur['accepte'] == 1) ? 'Oui' : 'Non'; ?></p>
-                    <p class="card-text"><strong>Refusé :</strong> <?php echo ($bailleur['refusee'] == 1) ? 'Oui' : 'Non'; ?></p>
-                    <?php if ($bailleur['refusee'] == 1): ?>
+                    <p class="card-text"><strong>Accepté :</strong> <?php echo ($bailleur['bailleur_accept'] == 1) ? 'Oui' : 'Non'; ?></p>
+                    <p class="card-text"><strong>Refusé :</strong> <?php echo ($bailleur['bailleur_refus'] == 1) ? 'Oui' : 'Non'; ?></p>
+                    <?php if ($bailleur['bailleur_refus'] == 1): ?>
                         <p class="card-text"><strong>Raison du refus :</strong> <?php echo $bailleur['raison_refus']; ?></p>
                     <?php endif; ?>
                 </div>

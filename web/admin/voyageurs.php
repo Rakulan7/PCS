@@ -12,15 +12,15 @@ include("function.php");
 
 $db = getDatabase();
 
-$getVoyageurAll = $db->prepare("SELECT * FROM voyageur");
+$getVoyageurAll = $db->prepare("SELECT * FROM utilisateur WHERE voyageur IS NOT NULL");
 $getVoyageurAll->execute([]);
 $voyageurAll = $getVoyageurAll->fetchAll(PDO::FETCH_ASSOC);
 
-$getvoyageurAccept = $db->prepare("SELECT * FROM voyageur WHERE bloque = 0");
+$getvoyageurAccept = $db->prepare("SELECT * FROM utilisateur WHERE bloque IS NULL AND voyageur IS NOT NULL");
 $getvoyageurAccept->execute([]);
 $voyageurAccept = $getvoyageurAccept->fetchAll(PDO::FETCH_ASSOC);
 
-$getvoyageurBloque = $db->prepare("SELECT * FROM voyageur WHERE bloque = 1");
+$getvoyageurBloque = $db->prepare("SELECT * FROM utilisateur WHERE bloque IS NOT NULL AND voyageur IS NOT NULL");
 $getvoyageurBloque->execute([]);
 $voyageurBloque = $getvoyageurBloque->fetchAll(PDO::FETCH_ASSOC);
 
@@ -87,7 +87,7 @@ $voyageurBloque = $getvoyageurBloque->fetchAll(PDO::FETCH_ASSOC);
                                 <tbody>
                                     <?php
                                     foreach ($voyageurAll as $voyageur) {
-                                        if ($voyageur["bloque"] == 1) {
+                                        if ($voyageur["bloque"] != null) {
                                             $status = "Bloqué";
                                         } else {
                                             $status = "Valide";
@@ -99,7 +99,7 @@ $voyageurBloque = $getvoyageurBloque->fetchAll(PDO::FETCH_ASSOC);
                                         echo "<td>" . $voyageur['pays_telephone'] . "</td>";
                                         echo "<td>" . $voyageur['numero_telephone'] . "</td>";
                                         echo "<td>" . $status . "</td>";
-                                        echo "<td><a href='vdetails.php?id=" . $voyageur['id_voyageur'] . "' class='btn btn-primary'>Détails</a></td>";
+                                        echo "<td><a href='vdetails.php?id=" . $voyageur['id_utilisateur'] . "' class='btn btn-primary'>Détails</a></td>";
                                         echo "</tr>";
                                     }
                                     ?>
@@ -130,7 +130,7 @@ $voyageurBloque = $getvoyageurBloque->fetchAll(PDO::FETCH_ASSOC);
                                         echo "<td>" . $voyageur['email'] . "</td>";
                                         echo "<td>" . $voyageur['pays_telephone'] . "</td>";
                                         echo "<td>" . $voyageur['numero_telephone'] . "</td>";
-                                        echo "<td><a href='vdetails.php?id=" . $voyageur['id_voyageur'] . "' class='btn btn-primary'>Détails</a></td>";
+                                        echo "<td><a href='vdetails.php?id=" . $voyageur['id_utilisateur'] . "' class='btn btn-primary'>Détails</a></td>";
                                         echo "</tr>";
                                     }
                                     ?>
@@ -161,7 +161,7 @@ $voyageurBloque = $getvoyageurBloque->fetchAll(PDO::FETCH_ASSOC);
                                         echo "<td>" . $voyageur['email'] . "</td>";
                                         echo "<td>" . $voyageur['pays_telephone'] . "</td>";
                                         echo "<td>" . $voyageur['numero_telephone'] . "</td>";
-                                        echo "<td><a href='vdetails.php?id=" . $voyageur['id_voyageur'] . "' class='btn btn-primary'>Détails</a></td>";
+                                        echo "<td><a href='vdetails.php?id=" . $voyageur['id_utilisateur'] . "' class='btn btn-primary'>Détails</a></td>";
                                         echo "</tr>";
                                     }
                                     ?>

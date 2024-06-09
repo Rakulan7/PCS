@@ -12,7 +12,7 @@ if(isset($_GET["id"])) {
 
     $db = getDatabase();
 
-    $getVoyageur = $db->prepare("SELECT * FROM voyageur WHERE id_voyageur = ?");
+    $getVoyageur = $db->prepare("SELECT * FROM utilisateur WHERE id_utilisateur = ?");
     $getVoyageur->execute([$voyageur_id]);
     $voyageur = $getVoyageur->fetch(PDO::FETCH_ASSOC);
 
