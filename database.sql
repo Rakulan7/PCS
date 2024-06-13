@@ -45,11 +45,11 @@ CREATE TABLE bien(
    creation DATETIME,
    maj DATETIME,
    raison_refus TEXT,
-   id_utilisateur INT NOT NULL,
-   id_utilisateur_1 INT NOT NULL,
+   id_bailleur INT NOT NULL,
+   id_administrateur INT NOT NULL,
    PRIMARY KEY(id_bien),
-   FOREIGN KEY(id_utilisateur) REFERENCES utilisateur(id_utilisateur),
-   FOREIGN KEY(id_utilisateur_1) REFERENCES utilisateur(id_utilisateur)
+   FOREIGN KEY(id_bailleur) REFERENCES utilisateur(id_utilisateur),
+   FOREIGN KEY(id_administrateur) REFERENCES utilisateur(id_utilisateur)
 );
 
 CREATE TABLE Occupation(

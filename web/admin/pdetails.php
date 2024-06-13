@@ -18,7 +18,7 @@ $prestataireId = htmlspecialchars($_GET["id"]);
 
 $db = getDatabase();
 
-$getPrestataire = $db->prepare("SELECT * FROM prestataire WHERE id_prestataire = ?");
+$getPrestataire = $db->prepare("SELECT * FROM utilisateur WHERE id_utilisateur = ? AND prestataire IS NOT NULL");
 $getPrestataire->execute([$prestataireId]);
 $prestataire = $getPrestataire->fetch(PDO::FETCH_ASSOC);
 
@@ -30,7 +30,7 @@ if(!$prestataire) {
 
 $genre = ($prestataire['genre'] == 0) ? 'Homme' : 'Femme';
 
-if ($prestataire["refuse_par_admin"] == 1) {
+if ($prestataire["prestataire_refus"] == 1) {
     $status = "Refusé";
     $reason = $prestataire["raison_refuse"];
 } else {
@@ -38,14 +38,14 @@ if ($prestataire["refuse_par_admin"] == 1) {
     $reason = "";
 }
 
-if ($prestataire["refuse_par_admin"] == 1 && $prestataire["accepte"] == 0) {
+if ($prestataire["prestataire_refus"] == 1 && $prestataire["prestataire_accept"] == 0) {
     $buttons = '<a href="process/accept_prestataire.php?id='. $prestataireId .'" class="btn btn-success mr-2">Accepter</a>
                 <a href="prestataires.php" class="btn btn-secondary mr-2">Retour</a>';
-} else if ($prestataire["refuse_par_admin"] == 0 && $prestataire["accepte"] == 0) {
+} else if ($prestataire["prestataire_refus"] == 0 && $prestataire["prestataire_accept"] == 0) {
     $buttons = '<a href="process/accept_prestataire.php?id='. $prestataireId .'" class="btn btn-success mr-2">Accepter</a>
                 <a href="refuses_prestataire.php?id='. $prestataireId .'" class="btn btn-danger mr-2">Refuser</a>
                 <a href="prestataires.php" class="btn btn-secondary mr-2">Retour</a>';
-} else if ($prestataire["refuse_par_admin"] == 0 && $prestataire["accepte"] == 1) {
+} else if ($prestataire["prestataire_refus"] == 0 && $prestataire["prestataire_accept"] == 1) {
     $buttons = '<a href="refuses_prestataire.php?id='. $prestataireId .'" class="btn btn-danger mr-2">Refuser</a>
                 <a href="prestataires.php" class="btn btn-secondary mr-2">Retour</a>';
 } else {
@@ -123,7 +123,7 @@ if ($prestataire["refuse_par_admin"] == 1 && $prestataire["accepte"] == 0) {
                     <p class="card-text"><strong>Numéro de téléphone :</strong> <?php echo $prestataire['numero_telephone']; ?></p>
                     <p class="card-text"><strong>Pays du téléphone :</strong> <?php echo $prestataire['pays_telephone']; ?></p>
                     <p class="card-text"><strong>Status :</strong> <?php echo $status; ?></p>
-                    <?php if ($prestataire["refuse_par_admin"] == 1): ?>
+                    <?php if ($prestataire["prestataire_refus"] == 1): ?>
                         <p class="card-text"><strong>Raison du refus :</strong> <?php echo $reason; ?></p>
                     <?php endif; ?>
                 </div>

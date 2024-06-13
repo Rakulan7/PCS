@@ -12,19 +12,19 @@ include("function.php");
 
 $db = getDatabase();
 
-$getPrestataireAll = $db->prepare("SELECT * FROM prestataire");
+$getPrestataireAll = $db->prepare("SELECT * FROM utilisateur WHERE prestataire IS NOT NULL");
 $getPrestataireAll->execute([]);
 $prestataireAll = $getPrestataireAll->fetchAll(PDO::FETCH_ASSOC);
 
-$getPrestataireAccept = $db->prepare("SELECT * FROM prestataire WHERE accepte = 1");
+$getPrestataireAccept = $db->prepare("SELECT * FROM utilisateur WHERE prestataire IS NOT NULL AND prestataire_accept = 1");
 $getPrestataireAccept->execute([]);
 $prestataireAccept = $getPrestataireAccept->fetchAll(PDO::FETCH_ASSOC);
 
-$getPrestataireWaiting = $db->prepare("SELECT * FROM prestataire WHERE (accepte IS NULL AND refuse_par_admin IS NULL) OR (accepte = 0 AND refuse_par_admin = 0)");
+$getPrestataireWaiting = $db->prepare("SELECT * FROM utilisateur WHERE prestataire IS NOT NULL AND prestataire_accept = 0 AND prestataire_refus = 0");
 $getPrestataireWaiting->execute([]);
 $prestataireWaiting = $getPrestataireWaiting->fetchAll(PDO::FETCH_ASSOC);
 
-$getPrestataireRefuses = $db->prepare("SELECT * FROM prestataire WHERE refuse_par_admin = 1");
+$getPrestataireRefuses = $db->prepare("SELECT * FROM utilisateur WHERE prestataire IS NOT NULL AND prestataire_refus = 1");
 $getPrestataireRefuses->execute([]);
 $prestataireRefuses = $getPrestataireRefuses->fetchAll(PDO::FETCH_ASSOC);
 ?>
@@ -90,11 +90,11 @@ $prestataireRefuses = $getPrestataireRefuses->fetchAll(PDO::FETCH_ASSOC);
                                 <tbody>
                                     <?php
                                     foreach ($prestataireAll as $prestataire) {
-                                        if ($prestataire["accepte"] == 1 && $prestataire["refuse_par_admin"] == 0) {
+                                        if ($prestataire["prestataire_accept"] == 1 && $prestataire["prestataire_refus"] == 0) {
                                             $status = "Accepté";
-                                        } else if (($prestataire["accepte"] == 0 && $prestataire["refuse_par_admin"] == 0) || ($prestataire["accepte"] == null && $prestataire["refuse_par_admin"] == null)) {
+                                        } else if ($prestataire["prestataire_accept"] == 0 && $prestataire["prestataire_refus"] == 0) {
                                             $status = "En attente";
-                                        } else if ($prestataire["accepte"] == 0 && $prestataire["refuse_par_admin"] == 1) {
+                                        } else if ($prestataire["prestataire_accept"] == 0 && $prestataire["prestataire_refus"] == 1) {
                                             $status = "Refusé";
                                         } else {
                                             $status = "";
@@ -106,7 +106,7 @@ $prestataireRefuses = $getPrestataireRefuses->fetchAll(PDO::FETCH_ASSOC);
                                         echo "<td>" . $prestataire['pays_telephone'] . "</td>";
                                         echo "<td>" . $prestataire['numero_telephone'] . "</td>";
                                         echo "<td>" . $status . "</td>";
-                                        echo "<td><a href='pdetails.php?id=" . $prestataire['id_prestataire'] . "' class='btn btn-primary'>Détails</a></td>";
+                                        echo "<td><a href='pdetails.php?id=" . $prestataire['id_utilisateur'] . "' class='btn btn-primary'>Détails</a></td>";
                                         echo "</tr>";
                                     }
                                     ?>
@@ -137,7 +137,7 @@ $prestataireRefuses = $getPrestataireRefuses->fetchAll(PDO::FETCH_ASSOC);
                                         echo "<td>" . $prestataire['email'] . "</td>";
                                         echo "<td>" . $prestataire['pays_telephone'] . "</td>";
                                         echo "<td>" . $prestataire['numero_telephone'] . "</td>";
-                                        echo "<td><a href='pdetails.php?id=" . $prestataire['id_prestataire'] . "' class='btn btn-primary'>Détails</a></td>";
+                                        echo "<td><a href='pdetails.php?id=" . $prestataire['id_utilisateur'] . "' class='btn btn-primary'>Détails</a></td>";
                                         echo "</tr>";
                                     }
                                     ?>
@@ -168,7 +168,7 @@ $prestataireRefuses = $getPrestataireRefuses->fetchAll(PDO::FETCH_ASSOC);
                                         echo "<td>" . $prestataire['email'] . "</td>";
                                         echo "<td>" . $prestataire['pays_telephone'] . "</td>";
                                         echo "<td>" . $prestataire['numero_telephone'] . "</td>";
-                                        echo "<td><a href='pdetails.php?id=" . $prestataire['id_prestataire'] . "' class='btn btn-primary'>Détails</a></td>";
+                                        echo "<td><a href='pdetails.php?id=" . $prestataire['id_utilisateur'] . "' class='btn btn-primary'>Détails</a></td>";
                                         echo "</tr>";
                                     }
                                     ?>
@@ -199,7 +199,7 @@ $prestataireRefuses = $getPrestataireRefuses->fetchAll(PDO::FETCH_ASSOC);
                                         echo "<td>" . $prestataire['email'] . "</td>";
                                         echo "<td>" . $prestataire['pays_telephone'] . "</td>";
                                         echo "<td>" . $prestataire['numero_telephone'] . "</td>";
-                                        echo "<td><a href='pdetails.php?id=" . $prestataire['id_prestataire'] . "' class='btn btn-primary'>Détails</a></td>";
+                                        echo "<td><a href='pdetails.php?id=" . $prestataire['id_utilisateur'] . "' class='btn btn-primary'>Détails</a></td>";
                                         echo "</tr>";
                                     }
                                     ?>
