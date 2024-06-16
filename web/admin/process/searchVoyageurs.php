@@ -8,7 +8,7 @@ if(isset($_GET['q'])) {
 
     $db = getDatabase();
 
-    $query = "SELECT * FROM voyageur WHERE prenom LIKE :searchTerm OR nom LIKE :searchTerm OR email LIKE :searchTerm OR numero_telephone LIKE :searchTerm OR pays_telephone LIKE :searchTerm";
+    $query = "SELECT * FROM utilisateur WHERE (prenom LIKE :searchTerm OR nom LIKE :searchTerm OR email LIKE :searchTerm OR numero_telephone LIKE :searchTerm OR pays_telephone LIKE :searchTerm) AND voyageur IS NOT NULL";
     $stmt = $db->prepare($query);
 
     $stmt->execute(array(':searchTerm' => '%' . $searchTerm . '%'));

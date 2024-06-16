@@ -11,7 +11,7 @@ if(isset($_GET["id"])) {
 
     $db = getDatabase();
 
-    $updatePrestataire = $db->prepare("UPDATE utilisateur SET bailleur_accept = 1, bailleur_refus = 0 WHERE id_utilisateur = ?");
+    $updatePrestataire = $db->prepare("UPDATE utilisateur SET prestataire_accept = 1, prestataire_refus = 0 WHERE id_utilisateur = ?");
     $updatePrestataire->execute([$prestataire_id]);
     $rowsAffected = $updatePrestataire->rowCount();
 

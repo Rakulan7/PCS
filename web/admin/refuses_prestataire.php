@@ -14,7 +14,7 @@ if(isset($_GET["id"])) {
     $db = getDatabase();
 
     // Récupère les informations du prestataire en attente avec l'ID spécifié
-    $getPrestataire = $db->prepare("SELECT * FROM prestataire WHERE id_prestataire = ?");
+    $getPrestataire = $db->prepare("SELECT * FROM utilisateur WHERE id_utilisateur = ?");
     $getPrestataire->execute([$prestataire_id]);
     $prestataire = $getPrestataire->fetch(PDO::FETCH_ASSOC);
 
@@ -44,7 +44,6 @@ if(isset($_GET["id"])) {
                     <li>Nom : <?= $prestataire['nom'] ?></li>
                     <li>Prénom : <?= $prestataire['prenom'] ?></li>
                     <li>Email : <?= $prestataire['email'] ?></li>
-                    <!-- Ajoutez d'autres informations du prestataire ici -->
                 </ul>
                 <form action="process/refuses_prestataire.php" method="POST">
                     <input type="hidden" name="id" value="<?= $prestataire_id ?>">

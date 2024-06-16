@@ -16,28 +16,28 @@ function searchFunction($inputId, $searchUrl, $type) {
             let tableHTML = "<table class='table table-striped'><thead><tr><th>Nom</th><th>Prénom</th><th>Email</th><th>Numéro pays</th><th>Numéro téléphone</th><th>Status</th><th>Détails</th></tr></thead><tbody>";
             data.forEach(function(user) {
                 let status;
-                if ('$type' === 'bailleur') {
-                    if (user["accepte"] == 1 && user["refusee"] == 0) {
+                if (user["bailleur"] != null) {
+                    if (user["bailleur_accept"] == 1 && user["bailleur_refus"] == 0) {
                         status = "Accepté";
-                    } else if ((user["accepte"] == 0 && user["refusee"] == 0) || (user["accepte"] == null && user["refusee"] == null)) {
+                    } else if (user["bailleur_accept"] == 0 && user["bailleur_refus"] == 0) {
                         status = "En attente";
-                    } else if (user["accepte"] == 0 && user["refusee"] == 1) {
+                    } else if (user["bailleur_accept"] == 0 && user["bailleur_refus"] == 1) {
                         status = "Refusé";
                     } else {
                         status = " ";
                     }
-                } else if('$type' === 'prestataire') {
-                    if (user["accepte"] == 1 && user["refuse_par_admin"] == 0) {
+                } else if(user["prestataire"] != null) {
+                    if (user["prestataire_accept"] == 1 && user["prestataire_refus"] == 0) {
                         status = "Accepté";
-                    } else if ((user["accepte"] == 0 && user["refuse_par_admin"] == 0) || (user["accepte"] == null && user["refuse_par_admin"] == null)) {
+                    } else if (user["prestataire_accept"] == 0 && user["prestataire_refus"] == 0) {
                         status = "En attente";
-                    } else if (user["accepte"] == 0 && user["refuse_par_admin"] == 1) {
+                    } else if (user["prestataire_accept"] == 0 && user["prestataire_refus"] == 1) {
                         status = "Refusé";
                     } else {
                         status = " ";
                     }
-                } else if ('$type' === 'voyageur') {
-                    if (user["bloque"] == 1) {
+                } else if (user["voyageur"] != null) {
+                    if (user["bloque"] == null) {
                         status = "Bloqué";
                     } else {
                         status = "Validé";

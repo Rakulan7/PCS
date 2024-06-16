@@ -32,7 +32,7 @@ $genre = ($prestataire['genre'] == 0) ? 'Homme' : 'Femme';
 
 if ($prestataire["prestataire_refus"] == 1) {
     $status = "Refusé";
-    $reason = $prestataire["raison_refuse"];
+    $reason = $prestataire["raison_refus"];
 } else {
     $status = "Accepté";
     $reason = "";
