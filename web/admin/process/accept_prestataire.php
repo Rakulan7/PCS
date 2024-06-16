@@ -11,7 +11,7 @@ if(isset($_GET["id"])) {
 
     $db = getDatabase();
 
-    $updatePrestataire = $db->prepare("UPDATE prestataire SET accepte = 1, refuse_par_admin = 0 WHERE id_prestataire = ?");
+    $updatePrestataire = $db->prepare("UPDATE utilisateur SET bailleur_accept = 1, bailleur_refus = 0 WHERE id_utilisateur = ?");
     $updatePrestataire->execute([$prestataire_id]);
     $rowsAffected = $updatePrestataire->rowCount();
 
@@ -21,12 +21,12 @@ if(isset($_GET["id"])) {
         exit;
     } else {
         logActivity("../", "Prestataire ID " . $prestataire_id . " n'a pas été accepté.");
-        header("location: ../prestataires_status.php?msg=Prestataire ID " . $prestataire_id . " n'a pas été accepté !&err=true");
+        header("location: ../prestataires.php?msg=Prestataire ID " . $prestataire_id . " n'a pas été accepté !&err=true");
         exit;
     }
 } else {
     logActivity("../", "Une erreur est survenue, ID du prestataire manquant.");
-    header("location: ../prestataires_status.php?msg=Une erreur est survenue, ID du prestataire manquant.&err=true");
+    header("location: ../prestataires.php?msg=Une erreur est survenue, ID du prestataire manquant.&err=true");
     exit;
 }
 ?>

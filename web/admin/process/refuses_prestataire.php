@@ -10,7 +10,7 @@ if(isset($_POST["id"])) {
 
     $db = getDatabase();
 
-    $updatePrestataire = $db->prepare("UPDATE prestataire SET refuse_par_admin = 1, accepte = 0, raison_refuse = ? WHERE id_prestataire = ?");
+    $updatePrestataire = $db->prepare("UPDATE prestataire SET refuse_par_admin = 1, accepte = 0, raison_refuse = ? WHERE id_utilisateur = ?");
     $updatePrestataire->execute([$reason, $prestataire_id]);
 
     logActivity("../", "Prestataire ". $prestataire_id ." refusé avec succès");

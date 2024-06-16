@@ -29,6 +29,9 @@ switch ($resource) {
     case 'occupation':
         handleOccupation($method, $id);
         break;
+    case 'login': // Assurez-vous que ce cas est présent
+        handleLogin($method);
+        break;
     case 'intervention':
         handleIntervention($method, $id);
         break;
@@ -36,6 +39,16 @@ switch ($resource) {
         http_response_code(404);
         echo json_encode(['error' => 'Resource not found']);
         break;
+}
+
+
+function handleLogin($method) {
+    if ($method === 'POST') {
+        login();
+    } else {
+        http_response_code(405); // Method Not Allowed
+        echo json_encode(['error' => 'Invalid request method']);
+    }
 }
 
 function handleUtilisateur($method, $id) {
@@ -61,7 +74,7 @@ function handleUtilisateur($method, $id) {
             $result = createUtilisateur($data);
             if ($result) {
                 http_response_code(201); // Created
-                echo json_encode(['success' => true]);
+                echo json_encode(["Utilisateur créer avec succès"]);
             } else {
                 http_response_code(500); // Internal Server Error
                 echo json_encode(['success' => false, 'error' => 'Échec de la création de l\'utilisateur']);

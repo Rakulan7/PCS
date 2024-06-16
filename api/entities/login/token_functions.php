@@ -1,5 +1,5 @@
 <?php
-require '../database/database.php';
+require '../database/config.php';
 
 function generateToken($userId, $pdo) {
     $token = bin2hex(random_bytes(16));

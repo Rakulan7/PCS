@@ -3,13 +3,13 @@
 require __DIR__ . '/../../database/config.php';
 
 
-function createOccupation($data) {
-    global $pdo;
-    $sql = "INSERT INTO occupation (date_debut, date_fin, raison_indispo, nombre_personne, id_bien, id_utilisateur)
-            VALUES (:date_debut, :date_fin, :raison_indispo, :nombre_personne, :id_bien, :id_utilisateur)";
-    $stmt = $pdo->prepare($sql);
-    return $stmt->execute($data);
-}
+// function createOccupation($data) {
+//     global $pdo;
+//     $sql = "INSERT INTO occupation (date_debut, date_fin, raison_indispo, nombre_personne, id_bien, id_utilisateur)
+//             VALUES (:date_debut, :date_fin, :raison_indispo, :nombre_personne, :id_bien, :id_utilisateur)";
+//     $stmt = $pdo->prepare($sql);
+//     return $stmt->execute($data);
+// }
 
 
 function getOccupation($id) {
@@ -28,13 +28,13 @@ function getAllOccupations() {
 }
 
 
-function updateOccupation($id, $data) {
-    global $pdo;
-    $data['id'] = $id;
-    $sql = "UPDATE occupation SET date_debut = :date_debut, date_fin = :date_fin, raison_indispo = :raison_indispo, nombre_personne = :nombre_personne, id_bien = :id_bien, id_utilisateur = :id_utilisateur WHERE id_occupation = :id";
-    $stmt = $pdo->prepare($sql);
-    return $stmt->execute($data);
-}
+// function updateOccupation($id, $data) {
+//     global $pdo;
+//     $data['id'] = $id;
+//     $sql = "UPDATE occupation SET date_debut = :date_debut, date_fin = :date_fin, raison_indispo = :raison_indispo, nombre_personne = :nombre_personne, id_bien = :id_bien, id_utilisateur = :id_utilisateur WHERE id_occupation = :id";
+//     $stmt = $pdo->prepare($sql);
+//     return $stmt->execute($data);
+// }
 
 
 function deleteOccupation($id) {
@@ -62,6 +62,27 @@ function makeReservation($id_bien, $start_date, $end_date, $id_utilisateur) {
     $sql = "INSERT INTO occupation (date_debut, date_fin, id_bien, id_utilisateur) VALUES (:start_date, :end_date, :id_bien, :id_utilisateur)";
     $stmt = $pdo->prepare($sql);
     return $stmt->execute(['start_date' => $start_date, 'end_date' => $end_date, 'id_bien' => $id_bien, 'id_utilisateur' => $id_utilisateur]);
+}
+
+
+function createOccupation($data) {
+    global $pdo;
+
+    $sql = "INSERT INTO occupation (date_debut, date_fin, raison_indispo, nombre_personne, id_bien, id_utilisateur) 
+            VALUES (:date_debut, :date_fin, :raison_indispo, :nombre_personne, :id_bien, :id_utilisateur)";
+
+    $stmt = $pdo->prepare($sql);
+    return $stmt->execute($data);
+}
+
+function updateOccupation($id, $data) {
+    global $pdo;
+
+    $data['id'] = $id;
+    $sql = "UPDATE occupation SET date_debut = :date_debut, date_fin = :date_fin, raison_indispo = :raison_indispo, nombre_personne = :nombre_personne, id_bien = :id_bien, id_utilisateur = :id_utilisateur WHERE id_occupation = :id";
+
+    $stmt = $pdo->prepare($sql);
+    return $stmt->execute($data);
 }
 
 ?>

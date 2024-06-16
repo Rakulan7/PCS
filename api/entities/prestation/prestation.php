@@ -3,13 +3,13 @@
 require __DIR__ . '/../../database/config.php';
 
 
-function createPrestation($data) {
-    global $pdo;
-    $sql = "INSERT INTO prestation (montant, duree_jour, titre, description, evolution, id_utilisateur)
-            VALUES (:montant, :duree_jour, :titre, :description, :evolution, :id_utilisateur)";
-    $stmt = $pdo->prepare($sql);
-    return $stmt->execute($data);
-}
+// function createPrestation($data) {
+//     global $pdo;
+//     $sql = "INSERT INTO prestation (montant, duree_jour, titre, description, evolution, id_utilisateur)
+//             VALUES (:montant, :duree_jour, :titre, :description, :evolution, :id_utilisateur)";
+//     $stmt = $pdo->prepare($sql);
+//     return $stmt->execute($data);
+// }
 
 
 function getPrestation($id) {
@@ -29,13 +29,13 @@ function getAllPrestations() {
 }
 
 
-function updatePrestation($id, $data) {
-    global $pdo;
-    $data['id'] = $id;
-    $sql = "UPDATE prestation SET montant = :montant, duree_jour = :duree_jour, titre = :titre, description = :description, evolution = :evolution, id_utilisateur = :id_utilisateur WHERE id_prestation = :id";
-    $stmt = $pdo->prepare($sql);
-    return $stmt->execute($data);
-}
+// function updatePrestation($id, $data) {
+//     global $pdo;
+//     $data['id'] = $id;
+//     $sql = "UPDATE prestation SET montant = :montant, duree_jour = :duree_jour, titre = :titre, description = :description, evolution = :evolution, id_utilisateur = :id_utilisateur WHERE id_prestation = :id";
+//     $stmt = $pdo->prepare($sql);
+//     return $stmt->execute($data);
+// }
 
 
 function deletePrestation($id) {
@@ -44,4 +44,29 @@ function deletePrestation($id) {
     $stmt = $pdo->prepare($sql);
     return $stmt->execute(['id' => $id]);
 }
+
+
+function createPrestation($data) {
+    global $pdo;
+
+    $sql = "INSERT INTO prestation (montant, duree_jour, titre, description, evolution, id_utilisateur) 
+            VALUES (:montant, :duree_jour, :titre, :description, :evolution, :id_utilisateur)";
+
+    $stmt = $pdo->prepare($sql);
+    return $stmt->execute($data);
+}
+
+function updatePrestation($id, $data) {
+    global $pdo;
+
+    $data['id'] = $id;
+    $sql = "UPDATE prestation SET montant = :montant, duree_jour = :duree_jour, titre = :titre, description = :description, evolution = :evolution, id_utilisateur = :id_utilisateur WHERE id_prestation = :id";
+
+    $stmt = $pdo->prepare($sql);
+    return $stmt->execute($data);
+}
+
 ?>
+
+
+

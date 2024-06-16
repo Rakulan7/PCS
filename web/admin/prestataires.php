@@ -16,7 +16,7 @@ $getPrestataireAll = $db->prepare("SELECT * FROM utilisateur WHERE prestataire I
 $getPrestataireAll->execute([]);
 $prestataireAll = $getPrestataireAll->fetchAll(PDO::FETCH_ASSOC);
 
-$getPrestataireAccept = $db->prepare("SELECT * FROM utilisateur WHERE prestataire IS NOT NULL AND prestataire_accept = 1");
+$getPrestataireAccept = $db->prepare("SELECT * FROM utilisateur WHERE prestataire IS NOT NULL AND prestataire_accept = 1 AND prestataire_refus = 0");
 $getPrestataireAccept->execute([]);
 $prestataireAccept = $getPrestataireAccept->fetchAll(PDO::FETCH_ASSOC);
 
@@ -24,7 +24,7 @@ $getPrestataireWaiting = $db->prepare("SELECT * FROM utilisateur WHERE prestatai
 $getPrestataireWaiting->execute([]);
 $prestataireWaiting = $getPrestataireWaiting->fetchAll(PDO::FETCH_ASSOC);
 
-$getPrestataireRefuses = $db->prepare("SELECT * FROM utilisateur WHERE prestataire IS NOT NULL AND prestataire_refus = 1");
+$getPrestataireRefuses = $db->prepare("SELECT * FROM utilisateur WHERE prestataire IS NOT NULL AND prestataire_accept = 0 AND prestataire_refus = 1");
 $getPrestataireRefuses->execute([]);
 $prestataireRefuses = $getPrestataireRefuses->fetchAll(PDO::FETCH_ASSOC);
 ?>

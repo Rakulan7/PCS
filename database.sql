@@ -1,5 +1,6 @@
 CREATE TABLE utilisateur(
    id_utilisateur INT AUTO_INCREMENT,
+   genre tinyint(1),
    nom VARCHAR(50),
    prenom VARCHAR(50),
    email VARCHAR(100),
@@ -20,10 +21,16 @@ CREATE TABLE utilisateur(
    nom_banque VARCHAR(100),
    url_rib VARCHAR(100),
    administrateur DATE,
+   bailleur_accept tinyint(1) DEFAULT NULL,
    bailleur DATE,
+   bailleur_refus tinyint(1) DEFAULT NULL,
    voyageur DATE,
-   prestataire DATE,
+   prestataire_accept tinyint(1) DEFAULT NULL,
+   prestataire date DEFAULT NULL,
+   prestataire_refus tinyint(1) DEFAULT NULL,
    raison_refus TEXT,
+   token VARCHAR(512),
+   newsletter tinyint(1),
    PRIMARY KEY(id_utilisateur)
 );
 
@@ -67,10 +74,10 @@ CREATE TABLE Occupation(
 
 CREATE TABLE intervention(
    id_intervention INT AUTO_INCREMENT,
-   date_debut_intervention DATE,
-   date_fin_intervention DATE,
-   raison CHAR(255),
+   titre VARCHAR(100),
    description TEXT,
+   montant DECIMAL(6,2),
+   duree_jour INT,
    id_utilisateur INT NOT NULL,
    PRIMARY KEY(id_intervention),
    FOREIGN KEY(id_utilisateur) REFERENCES utilisateur(id_utilisateur)
@@ -113,10 +120,8 @@ CREATE TABLE paiement(
    montant DECIMAL(15,2),
    raison_rembourssement TEXT,
    id_bien INT NOT NULL,
-   id_intervention INT NOT NULL,
    PRIMARY KEY(id_paiement),
-   FOREIGN KEY(id_bien) REFERENCES bien(id_bien),
-   FOREIGN KEY(id_intervention) REFERENCES intervention(id_intervention)
+   FOREIGN KEY(id_bien) REFERENCES bien(id_bien)
 );
 
 CREATE TABLE abonnement(
@@ -133,37 +138,21 @@ CREATE TABLE habilitation(
    nom VARCHAR(50),
    description TEXT,
    url VARCHAR(255),
-   id_utilisateur INT NOT NULL,
-   id_utilisateur_1 INT NOT NULL,
+   id_bailleur INT NOT NULL,
+   id_administrateur INT NOT NULL,
    PRIMARY KEY(id_habilitation),
-   UNIQUE(id_utilisateur),
-   FOREIGN KEY(id_utilisateur) REFERENCES utilisateur(id_utilisateur),
-   FOREIGN KEY(id_utilisateur_1) REFERENCES utilisateur(id_utilisateur)
+   FOREIGN KEY(id_bailleur) REFERENCES utilisateur(id_utilisateur),
+   FOREIGN KEY(id_administrateur) REFERENCES utilisateur(id_utilisateur)
 );
 
 CREATE TABLE message(
    id_message INT AUTO_INCREMENT,
    message TEXT,
-   id_utilisateur INT NOT NULL,
-   id_utilisateur_1 INT NOT NULL,
+   id_bailleur INT NOT NULL,
+   id_voyageur INT NOT NULL,
    PRIMARY KEY(id_message),
-   FOREIGN KEY(id_utilisateur) REFERENCES utilisateur(id_utilisateur),
-   FOREIGN KEY(id_utilisateur_1) REFERENCES utilisateur(id_utilisateur)
-);
-
-CREATE TABLE fiche_intervention(
-   id_fiche INT AUTO_INCREMENT,
-   url CHAR(255),
-   montant DECIMAL(6,2),
-   raison VARCHAR(255),
-   description TEXT,
-   id_bien INT NOT NULL,
-   id_intervention INT NOT NULL,
-   id_paiement INT NOT NULL,
-   PRIMARY KEY(id_fiche),
-   FOREIGN KEY(id_bien) REFERENCES bien(id_bien),
-   FOREIGN KEY(id_intervention) REFERENCES intervention(id_intervention),
-   FOREIGN KEY(id_paiement) REFERENCES paiement(id_paiement)
+   FOREIGN KEY(id_bailleur) REFERENCES utilisateur(id_utilisateur),
+   FOREIGN KEY(id_voyageur) REFERENCES utilisateur(id_utilisateur)
 );
 
 CREATE TABLE facture(
@@ -177,16 +166,31 @@ CREATE TABLE facture(
    FOREIGN KEY(id_paiement) REFERENCES paiement(id_paiement)
 );
 
+CREATE TABLE intervenu_pour(
+   id_bien INT,
+   id_intervention INT,
+   id_paiement INT,
+   date_debut_intervention DATETIME,
+   date_fin_intervention DATETIME,
+   description TEXT,
+   prix DECIMAL(6,2),
+   url_fiche_intervention VARCHAR(255),
+   PRIMARY KEY(id_bien, id_intervention, id_paiement),
+   FOREIGN KEY(id_bien) REFERENCES bien(id_bien),
+   FOREIGN KEY(id_intervention) REFERENCES intervention(id_intervention),
+   FOREIGN KEY(id_paiement) REFERENCES paiement(id_paiement)
+);
+
 CREATE TABLE prestation_commande(
    id_utilisateur INT,
    id_utilisateur_1 INT,
    id_prestation INT,
    id_paiement INT,
    montant DECIMAL(6,2),
-   evaluation CHAR(1),
+   evaluation INT,
    url_fiche VARCHAR(255),
    debut_prestation DATE,
-   durée SMALLINT,
+   durée INT,
    fin_prestation DATE,
    status VARCHAR(50),
    PRIMARY KEY(id_utilisateur, id_utilisateur_1, id_prestation, id_paiement),
