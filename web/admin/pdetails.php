@@ -122,6 +122,7 @@ if ($prestataire["prestataire_refus"] == 1 && $prestataire["prestataire_accept"]
                     <p class="card-text"><strong>Email :</strong> <?php echo $prestataire['email']; ?></p>
                     <p class="card-text"><strong>Numéro de téléphone :</strong> <?php echo $prestataire['numero_telephone']; ?></p>
                     <p class="card-text"><strong>Pays du téléphone :</strong> <?php echo $prestataire['pays_telephone']; ?></p>
+                    <p class="card-text"><strong>NFC ID : </strong><a href="nfc.php?id=<?= $prestataire['nfc_id']?>"><?php echo $prestataire['nfc_id']; ?></a></p>
                     <p class="card-text"><strong>Status :</strong> <?php echo $status; ?></p>
                     <?php if ($prestataire["prestataire_refus"] == 1): ?>
                         <p class="card-text"><strong>Raison du refus :</strong> <?php echo $reason; ?></p>

@@ -77,16 +77,6 @@ CREATE TABLE Occupation(
    FOREIGN KEY(id_utilisateur) REFERENCES utilisateur(id_utilisateur)
 );
 
-CREATE TABLE intervention(
-   id_intervention INT AUTO_INCREMENT,
-   titre VARCHAR(100),
-   description TEXT,
-   montant DECIMAL(6,2),
-   duree_jour INT,
-   id_utilisateur INT NOT NULL,
-   PRIMARY KEY(id_intervention),
-   FOREIGN KEY(id_utilisateur) REFERENCES utilisateur(id_utilisateur)
-);
 
 CREATE TABLE etat_des_lieux(
    id_etat INT AUTO_INCREMENT,
@@ -171,39 +161,28 @@ CREATE TABLE facture(
    FOREIGN KEY(id_paiement) REFERENCES paiement(id_paiement)
 );
 
-CREATE TABLE intervenu_pour(
-   id_bien INT,
-   id_intervention INT,
-   id_paiement INT,
-   date_debut_intervention DATETIME,
-   date_fin_intervention DATETIME,
-   description TEXT,
-   prix DECIMAL(6,2),
-   url_fiche_intervention VARCHAR(255),
-   PRIMARY KEY(id_bien, id_intervention, id_paiement),
-   FOREIGN KEY(id_bien) REFERENCES bien(id_bien),
-   FOREIGN KEY(id_intervention) REFERENCES intervention(id_intervention),
-   FOREIGN KEY(id_paiement) REFERENCES paiement(id_paiement)
-);
-
 CREATE TABLE prestation_commande(
    id_utilisateur INT,
-   id_utilisateur_1 INT,
+   id_prestataire INT,
+   id_bien INT,
    id_prestation INT,
    id_paiement INT,
    montant DECIMAL(6,2),
-   evaluation INT,
+   evaluation BYTE,
    url_fiche VARCHAR(255),
    debut_prestation DATE,
-   durée INT,
+   durée SMALLINT,
    fin_prestation DATE,
    status VARCHAR(50),
-   PRIMARY KEY(id_utilisateur, id_utilisateur_1, id_prestation, id_paiement),
+   fiche_url VARCHAR(255),
+   PRIMARY KEY(id_utilisateur, id_prestataire, id_bien, id_prestation, id_paiement),
    FOREIGN KEY(id_utilisateur) REFERENCES utilisateur(id_utilisateur),
-   FOREIGN KEY(id_utilisateur_1) REFERENCES utilisateur(id_utilisateur),
+   FOREIGN KEY(id_prestataire) REFERENCES utilisateur(id_utilisateur),
+   FOREIGN KEY(id_bien) REFERENCES bien(id_bien),
    FOREIGN KEY(id_prestation) REFERENCES prestation(id_prestation),
    FOREIGN KEY(id_paiement) REFERENCES paiement(id_paiement)
 );
+
 
 CREATE TABLE abonnement_commande(
    id_utilisateur INT,

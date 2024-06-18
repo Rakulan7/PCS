@@ -145,7 +145,6 @@ if ($bailleur["bailleur_accept"] == 0 && $bailleur["bailleur_refus"] == 0){
                     <p class="card-text"><strong>Numéro de téléphone :</strong> <?php echo $bailleur['numero_telephone']; ?></p>
                     <p class="card-text"><strong>Pays du téléphone :</strong> <?php echo $bailleur['pays_telephone']; ?></p>
                     <p class="card-text"><strong>Date d'inscription :</strong> <?php echo $bailleur['date_inscription']; ?></p>
-                    <p class="card-text"><strong>NFC ID : </strong><a href="nfc.php?id=<?= $bailleur['nfc_id']?>"><?php echo $bailleur['nfc_id']; ?></a></p>
                     <p class="card-text"><strong>Code banque :</strong> <?php echo $bailleur['code_banque']; ?></p>
                     <p class="card-text"><strong>Code guichet :</strong> <?php echo $bailleur['code_guichet']; ?></p>
                     <p class="card-text"><strong>Numéro de compte :</strong> <?php echo $bailleur['numero_de_compte']; ?></p>

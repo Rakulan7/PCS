@@ -53,7 +53,26 @@ $getPrestataireRefuse->execute([]);
 $prestataireRefuse = $getPrestataireRefuse->fetchAll(PDO::FETCH_ASSOC);
 $prestataireRefuse = $prestataireRefuse[0]['COUNT(id_utilisateur)'];
 
+// Partie Bien
+$acceptBien = $db->prepare("SELECT COUNT(id_bien) FROM bien WHERE id_administrateur IS NOT NULL AND raison_refus IS NULL AND refus_bot = 0");
+$acceptBien->execute([]);
+$bienAccept = $acceptBien->fetchAll(PDO::FETCH_ASSOC);
+$bienAccept = $bienAccept[0]['COUNT(id_bien)'];
 
+$pendingBien = $db->prepare("SELECT COUNT(id_bien) FROM bien WHERE id_administrateur IS NULL AND raison_refus IS NULL AND refus_bot = 0");
+$pendingBien->execute([]);
+$bienPending = $pendingBien->fetchAll(PDO::FETCH_ASSOC);
+$bienPending = $bienPending[0]['COUNT(id_bien)'];
+
+$refusBot = $db->prepare("SELECT COUNT(id_bien) FROM bien WHERE id_administrateur IS NULL AND refus_bot = 1");
+$refusBot->execute([]);
+$bienRefusBot = $refusBot->fetchAll(PDO::FETCH_ASSOC);
+$bienRefusBot = $bienRefusBot[0]['COUNT(id_bien)'];
+
+$refusAdmin = $db->prepare("SELECT COUNT(id_bien) FROM bien WHERE id_administrateur IS NOT NULL AND raison_refus IS NOT NULL");
+$refusAdmin->execute([]);
+$bienRefusAdmin = $refusAdmin->fetchAll(PDO::FETCH_ASSOC);
+$bienRefusAdmin = $bienRefusAdmin[0]['COUNT(id_bien)'];
 
 ?>
 
@@ -133,19 +152,21 @@ $prestataireRefuse = $prestataireRefuse[0]['COUNT(id_utilisateur)'];
   };
 
   const biensData = {
-    labels: ['Validés', 'En attente', 'Refusés'],
+    labels: ['Validés', 'En attente', 'Refusés par bot', 'Refusés par admin'],
     datasets: [{
-      label: 'Biens',
-      data: [70, 5, 1],
+      label: 'Biens (' + (<?=$bienAccept?> + <?=$bienPending?> + <?=$bienRefusBot?> + <?=$bienRefusAdmin?>) + ')',
+      data: [<?=$bienAccept?>, <?=$bienPending?>, <?=$bienRefusBot?>, <?=$bienRefusAdmin?>],
       backgroundColor: [
         'rgba(75, 192, 192, 0.2)',
         'rgba(255, 159, 64, 0.2)',
         'rgba(153, 102, 255, 0.2)',
+        'rgba(255, 99, 132, 0.2)',
       ],
       borderColor: [
         'rgba(75, 192, 192, 1)',
         'rgba(255, 159, 64, 1)',
         'rgba(153, 102, 255, 1)',
+        'rgba(255, 99, 132, 1)',
       ],
       borderWidth: 1
     }]

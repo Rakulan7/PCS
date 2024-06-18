@@ -149,7 +149,7 @@ try {
                     },
                     complete: function() {
                         // Lancer la prochaine requête après 5 secondes
-                        setTimeout(refreshLogs, 5000); // 5000 millisecondes = 5 secondes
+                        setTimeout(refreshLogs, 1000); // 5000 millisecondes = 5 secondes
                     }
                 });
             }
