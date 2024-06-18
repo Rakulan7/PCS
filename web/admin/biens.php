@@ -48,7 +48,10 @@ $bienAll = $getBienAll->fetchAll(PDO::FETCH_ASSOC);
                 <a class="nav-link" id="acceptes-tab" data-bs-toggle="tab" href="#acceptes">Valide</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" id="attente-tab" data-bs-toggle="tab" href="#attente">Bloqué</a>
+                <a class="nav-link" id="attente-tab" data-bs-toggle="tab" href="#attente">En attente</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="attente-tab" data-bs-toggle="tab" href="#bloque">Bloqué</a>
             </li>
         </ul>
     </div>

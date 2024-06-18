@@ -5,7 +5,7 @@ CREATE TABLE utilisateur(
    prenom VARCHAR(50),
    email VARCHAR(100),
    mot_de_passe VARCHAR(70),
-   date_inscription DATETIME,
+   date_inscription DATETIME DEFAULT CURRENT_TIMESTAMP,
    date_naissance DATE,
    numero_telephone CHAR(10),
    pays_telephone VARCHAR(10),
@@ -29,6 +29,7 @@ CREATE TABLE utilisateur(
    prestataire date DEFAULT NULL,
    prestataire_refus tinyint(1) DEFAULT NULL,
    raison_refus TEXT,
+   nfc_id VARCHAR(100),
    token VARCHAR(512),
    newsletter tinyint(1),
    PRIMARY KEY(id_utilisateur)
@@ -41,16 +42,20 @@ CREATE TABLE bien(
    address VARCHAR(255),
    city VARCHAR(100),
    code_postal VARCHAR(10),
-   pays VARCHAR(50),
+   type_bien VARCHAR(20),
    prix DECIMAL(10,2),
+   meuble TINYINT(1),
+   duree_location VARCHAR(15), /*courte periode ou longue periode*/
    salon INT,
    cuisine INT,
    salle_de_bain INT,
    toilette INT,
-   chambre INT,
+   chambre INT
+   nbr_personne_max INT,
    superficie DECIMAL(10,2),
-   creation DATETIME,
+   creation DATETIME DEFAULT CURRENT_TIMESTAMP,
    maj DATETIME,
+   refus_bot tinyint(1),
    raison_refus TEXT,
    id_bailleur INT NOT NULL,
    id_administrateur INT NOT NULL,
@@ -114,7 +119,7 @@ CREATE TABLE prestation(
 
 CREATE TABLE paiement(
    id_paiement INT AUTO_INCREMENT,
-   date_paiement DATE,
+   date_paiement DATETIME DEFAULT CURRENT_TIMESTAMP,
    paiement_valide BOOLEAN,
    paiement_methode VARCHAR(50),
    montant DECIMAL(15,2),
@@ -158,7 +163,7 @@ CREATE TABLE message(
 CREATE TABLE facture(
    id_facture INT AUTO_INCREMENT,
    url VARCHAR(255),
-   date_creation DATETIME,
+   date_creation DATETIME DEFAULT CURRENT_TIMESTAMP,
    service VARCHAR(100),
    description TEXT,
    id_paiement INT NOT NULL,
@@ -211,4 +216,21 @@ CREATE TABLE abonnement_commande(
    FOREIGN KEY(id_utilisateur) REFERENCES utilisateur(id_utilisateur),
    FOREIGN KEY(id_paiement) REFERENCES paiement(id_paiement),
    FOREIGN KEY(id_abonnement) REFERENCES abonnement(id_abonnement)
+);
+
+CREATE TABLE refresh_tokens (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      user_id INT NOT NULL,
+      refresh_token VARCHAR(512) NOT NULL,
+      expiry_date DATETIME NOT NULL,
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+      FOREIGN KEY (user_id) REFERENCES utilisateur(id_utilisateur)
+);
+
+CREATE TABLE nfc_log(
+   id_log INT AUTO_INCREMENT,
+   nfc_id VARCHAR(100),
+   log_date_time DATETIME,
+   id_bien INT NOT NULL,
+   PRIMARY KEY(id_log)
 );
