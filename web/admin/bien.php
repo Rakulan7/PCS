@@ -44,7 +44,7 @@ try {
     $photos = $stmtPhotos->fetchAll(PDO::FETCH_ASSOC);
 
     // Fetching passages des prestataires, reservations, and interventions data
-    $stmtPassages = $db->prepare("SELECT * FROM nfc_log WHERE id_bien = :id_bien LIMIT 5");
+    $stmtPassages = $db->prepare("SELECT * FROM nfc_log WHERE id_bien = :id_bien ORDER BY log_date_time DESC");
     $stmtPassages->bindParam(':id_bien', $id_bien, PDO::PARAM_INT);
     $stmtPassages->execute();
     $passages = $stmtPassages->fetchAll(PDO::FETCH_ASSOC);
@@ -57,11 +57,12 @@ try {
         return $user[0];
     }
 
-    $stmtReservations = $db->prepare("SELECT * FROM reservation WHERE id_bien = :id_bien LIMIT 5");
+    $stmtReservations = $db->prepare("SELECT * FROM occupation WHERE id_bien = :id_bien LIMIT 5");
     $stmtReservations->bindParam(':id_bien', $id_bien, PDO::PARAM_INT);
     $stmtReservations->execute();
     $reservations = $stmtReservations->fetchAll(PDO::FETCH_ASSOC);
 
+    
     $stmtInterventions = $db->prepare("SELECT * FROM prestation_commande WHERE id_bien = :id_bien LIMIT 5");
     $stmtInterventions->bindParam(':id_bien', $id_bien, PDO::PARAM_INT);
     $stmtInterventions->execute();
@@ -126,10 +127,10 @@ try {
     <div class="container">
         
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-6 text-md-left">
                 <a href="biens.php" class="btn btn-secondary">Retour à la liste des biens</a>
             </div>
-            <div class="col-md-6 text-md-end">
+            <div class="col-md-6 text-md-center">
                 <a href="modifier_bien.php?id=<?php echo $id_bien; ?>" class="btn btn-primary">Modifier</a>
             </div>
         </div>
@@ -202,7 +203,7 @@ try {
 
         <div class="row mb-12">
             <div class="col-md-12">
-                <h2 class="mb-4">Passages des prestataires</h2>
+                <h2 class="mb-4">Passages des prestataires <a href="passage.php?id_bien=<?= $id_bien ?>">details</a></h2>
                 <div class="table-container">
                     <table class="table table-striped">
                         <thead>
@@ -225,7 +226,7 @@ try {
                 </div>
             </div>
             <div class="col-md-12">
-                <h2 class="mb-4">Réservations</h2>
+                <h2 class="mb-4">Réservations <a href="reservation.php?id_bien=<?= $id_bien ?>">details</a></h2>
                 <div class="table-container">
                     <table class="table table-striped">
                         <thead>
@@ -256,7 +257,7 @@ try {
                                 <th>ID</th>
                                 <th>Date</th>
                                 <th>Prestataire</th>
-                                <th>Description</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -264,13 +265,17 @@ try {
                                 <tr>
                                     <td><?php echo htmlspecialchars($intervention['id']); ?></td>
                                     <td><?php echo htmlspecialchars($intervention['date']); ?></td>
-                                    <td><?php echo htmlspecialchars($intervention['description']); ?></td>
+                                    <td><?php echo htmlspecialchars($intervention['prestataire']); ?></td>
+                                    <td>
+                                        <a href="details.php?id=<?php echo htmlspecialchars($intervention['id']); ?>" class="btn btn-primary">Voir Détails</a>
+                                    </td>
                                 </tr>
                             <?php endforeach; ?>
                         </tbody>
                     </table>
                 </div>
             </div>
+
         </div>
 
     </div>

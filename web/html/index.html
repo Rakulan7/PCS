@@ -1,98 +1,107 @@
-<!doctype html>
-<html lang="fr">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Accueil</title>
-  <link rel="stylesheet" href="style.css">
-  <script src="js/script.js" defer></script>
-  <script src="js/script1.js" defer></script>
-  <script src="js/script3.js" defer></script>
-  <script src="js/BurgerMenu.js" defer></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ParisCareTakerService</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <script src="scripts.js" defer></script>
 </head>
-<body onload="onload()">
-  <header>k
-    <div class="header">
-      <div class="header-container">
-        <div class="neutro"><a href="index.html"><img src="img/pcs_logo_web-removebg-preview.png"></a></div>
-        <ul class="try">
-          <li class="dropdown">
-            <a href="#" id="openModal" class="login-link">S'IDENTIFIER</a>
-          </li>
-          
-          <div id="container1" class="container">
-            <span class="close">&times;</span>
-            <h1>M'IDENTIFIER</h1>
-            <div id="tabs">
-              <button class="active" onclick="showLogin()">Connexion</button>
-              <button id="inscriptionBtn" onclick="showSignup()">Inscription</button>
-            </div>
-            <form action="{{ url_for('traitement') }}" method="post" id="login-form">
-              <input type="email" id="emailLogin" name="email" placeholder="Adresse e-mail" required>
-              <br>
-              <input type="password" id="passwordLogin" name="password" placeholder="Mot de passe" required>
-              <br>
-              <br>
-              <button type="submit">Se connecter</button>
-            </form>
-            <form action="{{ url_for('traitement') }}" method="post" id="signup-form">
-              <input type="text" id="name" name="name" placeholder="Nom" required>
-              <br>
-              <input type="email" id="emailSignup" name="email" placeholder="Adresse e-mail" required>
-              <br>
-              <input type="password" id="passwordSignup" name="password" placeholder="Mot de passe" required>
-              <br>
-              <br>
-              <button type="submit">S'inscrire</button>
-            </form>
+<body>
+    <header class="bg-dark text-white p-3">
+        <div class="container d-flex justify-content-between align-items-center">
+            <div class="logo h3">ParisCareTakerService</div>
+            <nav>
+                <ul class="nav">
+                    <li class="nav-item"><a href="#home" class="nav-link text-white active">Home</a></li>
+                    <li class="nav-item"><a href="#services" class="nav-link text-white">Services</a></li>
+                    <li class="nav-item"><a href="#about" class="nav-link text-white">About Us</a></li>
+                    <li class="nav-item"><a href="#contact" class="nav-link text-white">Contact</a></li>
+                    <li class="nav-item">
+                        <select id="languageSelect" class="form-control" onchange="changeLanguage()">
+                            <option value="en">English</option>
+                            <option value="fr">Français</option>
+                            <option value="es">Español</option>
+                        </select>
+                    </li>
+                </ul>
+            </nav>
         </div>
+    </header>
+    
+    <main id="content" class="container mt-4">
+        <section id="home" class="text-center mb-5">
+            <h1 class="display-4" id="homeTitle">Welcome to ParisCareTakerService</h1>
+            <p class="lead" id="homeDescription">Your perfect solution for short-term rentals in Paris. Find the best places to stay with trusted hosts.</p>
+            <button class="btn btn-primary btn-lg mt-4">Explore Now</button>
+        </section>
 
-          
-            <img id="searchIcon" class="searchIcon" src="img/icons8-loupe-50.png">
-            <form id="searchForm">
-                <input type="text" name="searchQuery" placeholder="Rechercher...">
-                <button type="submit">Rechercher</button>
-            </form>
-            <script>
-                document.getElementById("searchIcon").addEventListener("click", function() {
-                var searchForm = document.getElementById("searchForm");
-                searchForm.classList.toggle("visible");
-            });
-            </script>
-            <img src="logo/menu-btn.png" alt="menu-hamburger" class="menu-hamburger">
-            <button class="btn-toogle" onclick="darkmode()" style="color: #93441a;">&#x261B;</button> <!--style="top: 92.6%;" -->
-            <script src="js/DarkLightMode.js"></script>
-        </ul>
-      </div>
-    </div>
-  </header>
-  <main>
-    <div class="main">
-        <div class="slide-container2">        
-            <div class="custom-slider fade">
-              <a href="maisons/maison1.html">
-              <img class="slide-img" src="img/zyro-image (1).png">
-              <!--<div class="slide-text2">PARIS CARETAKER SERVICES</div></a>-->
+        <section id="apartments" class="mb-5">
+            <h2 class="text-center">Featured Apartments</h2>
+            <div class="row mt-4" id="apartmentsList">
+                <!-- Apartment cards will be dynamically added here -->
             </div>
-            <div class="custom-slider fade">
-              <a href="maisons/maison2.html">
-              <img class="slide-img" src="img/maison2.png">
-              <div class="slide-text">A LA UNE</div></a>
+        </section>
+
+        <section id="services" class="mb-5">
+            <h2 class="text-center" id="servicesTitle">Our Services</h2>
+            <div class="row mt-4" id="servicesList">
+                <!-- Service cards will be dynamically added here -->
             </div>
-            <div class="custom-slider fade">
-              <a href="maisons/maison3.html">
-              <img class="slide-img" src="img/maison2.png">
-              <div class="slide-text">A LA UNE</div></a>
+        </section>
+
+        <section id="about" class="mb-5">
+            <h2 class="text-center" id="aboutTitle">About Us</h2>
+            <div class="row mt-4">
+                <div class="col-md-6">
+                    <p id="aboutDesc1">ParisCareTakerService was founded with the mission to provide high-quality short-term rental options in the beautiful city of Paris. We strive to make every stay memorable by offering exceptional customer service and carefully curated accommodations.</p>
+                </div>
+                <div class="col-md-6">
+                    <p id="aboutDesc2">Our team is passionate about travel and hospitality, and we work tirelessly to ensure that our clients have an unforgettable experience. Whether you are visiting Paris for business or pleasure, we have the perfect place for you.</p>
+                </div>
             </div>
-            <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
-            <a class="next" onclick="plusSlides(1)">&#10095;</a>
-        </div>
-        <div class="slide-dot">
-            <span class="dot" onclick="currentSlide(1)"></span> 
-            <span class="dot" onclick="currentSlide(2)"></span> 
-            <span class="dot" onclick="currentSlide(3)"></span>
-        </div>
-    </div>
-  </main>
+        </section>
+
+        <section id="contact" class="mb-5">
+            <h2 class="text-center" id="contactTitle">Contact Us</h2>
+            <div class="row mt-4">
+                <div class="col-md-6">
+                    <form>
+                        <div class="form-group">
+                            <label for="name">Name</label>
+                            <input type="text" class="form-control" id="name" placeholder="Your name">
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" class="form-control" id="email" placeholder="Your email">
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Message</label>
+                            <textarea class="form-control" id="message" rows="4" placeholder="Your message"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Send</button>
+                    </form>
+                </div>
+                <div class="col-md-6">
+                    <h5>Our Address</h5>
+                    <p>123 rue de Paris, 75001 Paris, France</p>
+                    <h5>Email</h5>
+                    <p>contact@pariscaretakerservice.com</p>
+                    <h5>Phone</h5>
+                    <p>+33 1 23 45 67 89</p>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <footer class="bg-dark text-white text-center p-3">
+        <p>&copy; 2024 ParisCareTakerService. All rights reserved.</p>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="scripts.js"></script>
 </body>
 </html>
