@@ -37,7 +37,6 @@ class PDF extends FPDF
     }
 }
 
-// Fonction pour récupérer la connexion à la base de données
 function getDatabase() {
     $servername = "localhost";
     $username = "root";
@@ -53,25 +52,21 @@ function getDatabase() {
     return $db;
 }
 
-// Connexion à la base de données
 try {
     $db = getDatabase();
 } catch (Exception $e) {
     die("Database connection failed: " . $e->getMessage());
 }
 
-// Récupération des bailleurs/prestataires disponibles
 $users_result = $db->query("SELECT id_utilisateur FROM utilisateur WHERE bailleur_accept = 1 OR prestataire_accept = 1");
 
 if (!$users_result) {
     die("Query failed: " . $db->error);
 }
 
-// Génération des factures pour chaque bailleur/prestataire
 while ($user = $users_result->fetch_assoc()) {
     $id_utilisateur = $user['id_utilisateur'];
 
-    // Récupération des informations de l'utilisateur à partir de la base de données
     $user_result = $db->query("SELECT * FROM utilisateur WHERE id_utilisateur = $id_utilisateur");
 
     if (!$user_result) {
@@ -84,8 +79,7 @@ while ($user = $users_result->fetch_assoc()) {
         die("User not found");
     }
 
-    // Récupération des prestations commandées par l'utilisateur pour le mois en cours
-    $current_month = date('Y-m-01'); // Premier jour du mois en cours
+    $current_month = date('Y-m-01');
     $prestations_result = $db->query("
         SELECT p.titre, p.montant, p.description, pc.montant AS total, pc.debut_prestation, pc.fin_prestation
         FROM prestation_commande pc
@@ -98,18 +92,15 @@ while ($user = $users_result->fetch_assoc()) {
         die("Query failed: " . $db->error);
     }
 
-    // Génération du PDF
     $pdf = new PDF();
     $pdf->AliasNbPages();
     $pdf->AddPage();
     $pdf->SetFont('Arial', 'B', 14);
 
-    // Informations de l'utilisateur
     $pdf->Cell(0, 10, 'Facture pour: ' . $user_info['nom'] . ' ' . $user_info['prenom'], 0, 1);
     $pdf->SetFont('Arial', '', 12);
     $pdf->Ln(10);
 
-    // Tableau des prestations
     $header = array('Titre', 'Debut', 'Fin', 'Montant', 'Total');
     $data = [];
     $total_facture = 0;
@@ -121,13 +112,11 @@ while ($user = $users_result->fetch_assoc()) {
 
     $pdf->InvoiceTable($header, $data);
 
-    // Total
     $pdf->SetFont('Arial', 'B', 12);
     $pdf->Cell(120, 6, '', 0);
     $pdf->Cell(40, 6, 'Total', 1);
     $pdf->Cell(40, 6, number_format($total_facture, 2), 1);
 
-    // Génération du fichier PDF 
     $pdf_file = "/var/www/facture/{$id_utilisateur}_" . date('Ymd_His') . "_" . str_pad(mt_rand(1, 99999), 5, '0', STR_PAD_LEFT) . ".pdf";
     $pdf->Output('F', $pdf_file);
 
