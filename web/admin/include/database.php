@@ -3,9 +3,9 @@
 function getDatabase(){
     try{
         $db = new PDO(
-            'mysql:host=localhost;dbname=pcs;charset=utf8',
+            'mysql:host=localhost;dbname=pcs5;charset=utf8',
             'root',
-            '',
+            'esgi',
             [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]
         );
     }
